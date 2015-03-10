@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="scripts/angular.min.js"></script>
+    <script src="scripts/jquery.min.js"></script>
+</head>
+<body ng-app="MusicPlayerApp">
+
+    <div id="dz-root"></div>
+    <div id="dz-player" style="width:100%;" align="center"></div>
+
+    <div align="center" ng-controller="MusicPlayerController as musicPlayer">
+
+        <h3>Controls</h3>
+        <button type="button" ng-click="musicPlayer.playNextTrack();">Next</button>
+
+        <h3>Playlist</h3>
+        <!-- Contains the track that is being played-->
+        <p><b>{{musicPlayer.currentTrackName}}</b></p>
+        <p>{{musicPlayer.currentTrackArtist}}</p>
+       <!-- <img src={{musicPlayer.currentTrackThumbailURL}}></img>-->
+
+        <!-- Table containing the proposed tracks-->
+        <table>
+            <th>Next tracks : </th>
+            <tr ng-repeat="track in musicPlayer.proposedTracksName">
+                <td>{{track}}</td>
+            </tr>
+        </table>
+
+    </div>
+
+    <script src="http://cdn-files.deezer.com/js/min/dz.js"></script>
+    <script>
+        DZ.init({
+            appId  : 'YOUR_APP_ID',
+            channelUrl : 'http://YOUR_DOMAIN/channel.html',
+            player: {
+                container: 'dz-player',
+                width : 800,
+                height : 300
+            }
+        });
+    </script>
+
+    <script>
+        var app = angular.module('MusicPlayerApp', [ ]);
+        app.controller('MusicPlayerController', MusicPlayerController);
+
+        function MusicPlayerController($scope){
+
+            //this.musicPlayer = new MusicPlayerLocalClient();
+            this.musicPlayer = new MusicPlayerRestClient();
+            this.currentTrack   = null;
+            this.proposedTracks = null;
+            this.proposedTracksName = null;
+            this.previousTracks = null;
+
+            this.currentTrackName  = null;
+            this.currentTrackArtist = null;
+
+            this.getTrackInfo = function () {
+                var that = this;
+                DZ.api('/track/' + this.currentTrack, function (track) {
+                    that.currentTrackName  = track.title;
+                    that.currentTrackArtist = track.artist.name;
+                    that.currentTrackThumbailURL = track.album.cover;
+
+                    // Explanation: https://docs.angularjs.org/guide/scope
+                    $scope.$apply();
+                });
+            };
+
+            this.getAllTracksInfo = function () {
+                var that = this;
+                that.proposedTracksName = [];
+                for (var i = 0; i < that.proposedTracks.length; i++) {
+                    DZ.api('/track/' + this.proposedTracks[i], function (track) {
+                        that.proposedTracksName.push(track.title);
+                        $scope.$apply();
+                    });
+                }
+            };
+
+            this.playNextTrack = function() {
+                var nextTrack = this.musicPlayer.getNextTrack();
+                DZ.player.playTracks( [nextTrack] );
+                this.updatePlaylist();
+            };
+
+            this.updatePlaylist = function () {
+
+                this.currentTrack   = this.musicPlayer.getCurrentTrack();
+                this.proposedTracks = this.musicPlayer.getProposedTracks();
+                this.previousTracks = this.musicPlayer.getPreviousTracks();
+
+                this.getTrackInfo();
+                this.getAllTracksInfo();
+            }
+
+        } // class
+    </script>
+
+    <script>
+        function MusicPlayerLocalClient(){
+
+            var currentTrack   = null;
+            var proposedTracks = [60946206, 60946207, 60946208, 60946209];
+            var previousTracks = [ ];
+
+            this.getCurrentTrack = function(){
+                return currentTrack;
+            };
+
+            this.getProposedTracks = function (){
+                return proposedTracks;
+            };
+
+            this.getPreviousTracks = function(){
+                return previousTracks;
+            };
+
+            this.getNextTrack = function(){
+                previousTracks.push(currentTrack);
+                currentTrack = proposedTracks.shift();
+                return currentTrack;
+            };
+
+        } // class
+    </script>
+
+    <script>
+        function MusicPlayerRestClient(){
+
+            var CURRENT_TRACK_URI   = 'http://localhost:3000/playlist/currentTrack';
+            var PROPOSED_TRACKS_URI = 'http://localhost:3000/playlist/proposedTracks';
+            var PREVIOUS_TRACKS_URI = 'http://localhost:3000/playlist/previousTracks';
+            var NEXT_TRACK_URI      = 'http://localhost:3000/playlist/nextTrack';
+
+            this.getCurrentTrack = function(){
+                var currentTrack = this.doRequest('GET', CURRENT_TRACK_URI, null);
+                return currentTrack;
+            };
+
+            this.getProposedTracks = function (){
+                var proposedTracks = this.doRequest('GET', PROPOSED_TRACKS_URI, null);
+                return proposedTracks;
+            };
+
+            this.getPreviousTracks = function(){
+                var previousTracks = this.doRequest('GET', PREVIOUS_TRACKS_URI, null);
+                return previousTracks;
+            };
+
+            this.getNextTrack = function(){
+                var nextTrack = this.doRequest('POST', NEXT_TRACK_URI, null);
+                return nextTrack;
+            };
+
+            this.doRequest = function(verb, url, data) {
+
+                var response;
+
+                $.ajax({
+                    url:  url,
+                    type: verb,
+                    async: false,
+                    success: function(resp) {
+                        response = resp;
+                    },
+                    error: function(xhr) {
+                        console.log("Error when " + verb + url);
+                    }
+                });
+
+                return response;
+
+            }; // method
+
+        } // class
+    </script>
+
+</body>
+</html>
