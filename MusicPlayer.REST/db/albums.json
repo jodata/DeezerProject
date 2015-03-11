@@ -1,0 +1,71 @@
+{
+   "_id": "Albums",
+   "data": [
+     {
+         "id": "302127",
+         "title": "Discovery",
+         "artist":"Daft Punk",
+         "cover": "https://api.deezer.com/album/302127/image"
+     },
+     {
+         "id": "7034647",
+         "title": "Clandestino",
+         "artist":"Manu Chao",
+         "cover": "https://api.deezer.com/album/7034647/image"
+     },
+     {
+         "id": "492889",
+         "title": "The Very Best Of",
+         "artist":"The Dubliners",
+         "cover": "https://api.deezer.com/album/492889/image"
+     },
+     {
+         "id": "90689",
+         "title": "Music From The Motion Picture The Departed (U.S. Version)",
+         "artist":"The Departed Soundtrack",
+         "cover": "https://api.deezer.com/album/90689/image"
+     },
+     {
+         "id": "924544",
+         "title": "Racing With the Sun",
+         "artist":"Chinese Man",
+         "cover": "https://api.deezer.com/album/924544/image"
+     },
+     {
+         "id": "49201",
+         "title": "Groove Sessions",
+         "artist":"Chinese Man",
+         "cover": "https://api.deezer.com/album/49201/image"
+     },
+     {
+         "id": "6758080",
+         "title": "Coco Part 2",
+         "artist":"Parov Stelar",
+         "cover": "https://api.deezer.com/album/6758080/image"
+     },
+     {
+         "id": "6758075",
+         "title": "The Princess Part Two",
+         "artist":"Parov Stelar",
+         "cover": "https://api.deezer.com/album/6758075/image"
+     },
+     {
+         "id": "6893935",
+         "title": "True",
+         "artist":"Avicii",
+         "cover": "https://api.deezer.com/album/6893935/image"
+     },
+     {
+         "id": "6240279",
+         "title": "Night Visions",
+         "artist":"Imagine Dragons",
+         "cover": "https://api.deezer.com/album/6240279/image"
+     },
+     {
+         "id": "3616761",
+         "title": "En attendant les caravanes...",
+         "artist":"La Rue Kétanou",
+         "cover": "https://api.deezer.com/album/3616761/image"
+     }
+   ]
+}
