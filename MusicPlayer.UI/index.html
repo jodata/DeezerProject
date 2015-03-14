@@ -1,34 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>Projet web : music player</title>
+    <meta charset="UTF-8" />
     <script src="scripts/angular.min.js"></script>
     <script src="scripts/jquery.min.js"></script>
-    <script src="scripts/jquery.min.js"></script>
+    <!--bootstrap -->
+    <script src="styles/bootstrap.min.css"></script>
+    <link href="styles/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body ng-app="MusicPlayerApp">
+    <div class="container" align="center">
 
-<!-- coucou -->
-    <div id="dz-root"></div>
-    <div id="dz-player" style="width:100%;" align="center"></div>
+        <div id="dz-root"></div>
+        <div id="dz-player" style="width:100%;"></div>
 
-    <div align="center" ng-controller="MusicPlayerController as musicPlayer">
+        <div ng-controller="MusicPlayerController as musicPlayer">
 
-        <h3>Controls</h3>
-        <button type="button" ng-click="musicPlayer.playNextTrack();">Next</button>
+            <h3>Controls</h3>
+            <button type="button" ng-click="musicPlayer.playNextTrack();">Next</button>
 
-        <h3>Playlist</h3>
-        <!-- Contains the track that is being played-->
-        <p><b>{{musicPlayer.currentTrackName}}</b></p>
-        <p>{{musicPlayer.currentTrackArtist}}</p>
-       <!-- <img src={{musicPlayer.currentTrackThumbailURL}}></img>-->
+            <h3>Playlist</h3>
+            <!-- Contains the track that is being played-->
+            <p><b>{{musicPlayer.currentTrackName}}</b></p>
+            <p>{{musicPlayer.currentTrackArtist}}</p>
+           <!-- <img src={{musicPlayer.currentTrackThumbailURL}}></img>-->
 
-        <!-- Table containing the proposed tracks-->
-        <table>
-            <th>Next tracks : </th>
-            <tr ng-repeat="track in musicPlayer.proposedTracksName">
-                <td>{{track}}</td>
-            </tr>
-        </table>
+            <!-- Table containing the proposed tracks-->
+            <table>
+                <th>Next tracks : </th>
+                <tr ng-repeat="track in musicPlayer.proposedTracksName">
+                    <td>{{track}}</td>
+                </tr>
+            </table>
+
+        </div>
+
+        <!--footer-->
+        <footer class="row">
+            <div class="col-lg-12">&copy; 2015 All Rights Reserved </br>
+                Contacts : <a href="mailto:drouet.remy@gmail.com">Rémy Drouet</a> &
+                <a href="mailto:	jordandaita@gmail.com">Jordan Daita</a> &
+                <a href="mailto:elisaling88@gmail.com">Ling LI</a>
+            </div>
+        </footer>
 
     </div>
 
@@ -179,7 +195,7 @@
 
             this.putAlbumTracks = function(albumID){
                 this.doRequest('PUT', PUT_ALBUMS, albumID);
-            }
+            };
 
             this.doRequest = function(verb, url, data) {
 
