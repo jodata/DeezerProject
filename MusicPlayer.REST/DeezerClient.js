@@ -22,7 +22,7 @@ var Deezer = module.exports = function() {
     }; // method
 
     this.getAlbumTracks = function (albumID, callback) {
-        var url = DEEZER_ARTIST_ALBUMS.replace('{_}', albumID);
+        var url = DEEZER_SONGS_ALBUMS.replace('{_}', albumID);
         new httpClient().GET(url, function (resp) {
             callback(JSON.parse(resp.body).data);
         });

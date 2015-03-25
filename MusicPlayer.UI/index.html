@@ -15,7 +15,7 @@
 
         <h3>Controls</h3>
         <button type="button" ng-click="musicPlayer.playNextTrack();">Next</button>
-
+        <button type="button" ng-click="musicPlayer.updateCatalogue();">Update DB</button>
         <h3>Playlist</h3>
         <!-- Contains the track that is being played-->
         <p><b>{{musicPlayer.currentTrackName}}</b></p>
@@ -91,17 +91,18 @@
                 this.updatePlaylist();
             };
 
+            this.updateCatalogue = function() {
+                this.albums = this.musicPlayer.getAlbums();
+                for(var i=0;i<this.albums.length;i++){
+                    this.musicPlayer.putAlbumTracks(this.albums[i].id);
+                }
+            }
+
             this.updatePlaylist = function () {
 
                 this.currentTrack   = this.musicPlayer.getCurrentTrack();
                 this.proposedTracks = this.musicPlayer.getProposedTracks();
                 this.previousTracks = this.musicPlayer.getPreviousTracks();
-                this.albums         = this.musicPlayer.getAlbums();
-
-                //for(var i=0;i<this.albums.length;i++){
-                    console.log(this.albums[0].id);
-                    this.musicPlayer.putAlbumTracks(JSON.stringify(this.albums[0].id));
-                //}
 
                 this.getTrackInfo();
                 this.getAllTracksInfo();
@@ -150,7 +151,7 @@
             var PREVIOUS_TRACKS_URI = 'http://localhost:3000/playlist/previousTracks';
             var NEXT_TRACK_URI      = 'http://localhost:3000/playlist/nextTrack';
             var GET_ALBUMS          = 'http://localhost:3000/albums';
-            var PUT_ALBUMS          = 'http://localhost:3000/tracks/album';
+            var PUT_ALBUMS          = 'http://localhost:3000/tracks/album/{_}';
 
             this.getCurrentTrack = function(){
                 var currentTrack = this.doRequest('GET', CURRENT_TRACK_URI, null);
@@ -178,7 +179,8 @@
             };
 
             this.putAlbumTracks = function(albumID){
-                this.doRequest('PUT', PUT_ALBUMS, albumID);
+                var url = PUT_ALBUMS.replace('{_}',albumID);
+                this.doRequest('PUT', url, null);
             }
 
             this.doRequest = function(verb, url, data) {
@@ -188,7 +190,6 @@
                 $.ajax({
                     url:  url,
                     type: verb,
-                    data: data,
                     async: false,
                     success: function(resp) {
                         response = resp;
