@@ -53,8 +53,9 @@
 
             <!--<h3>Controls</h3>-->
             <div class="row">
-                <button class="btn" type="button" ng-click="musicPlayer.playNextTrack();"> Suivant</button>
-                <button type="button" ng-click="musicPlayer.updateCatalogue();">Update DB</button>
+                <button class="btn" type="button" ng-click="musicPlayer.playNextTrack();">Suivant</button>
+                <button class="btn" type="button" ng-click="musicPlayer.addAlbumsTracks();">AddAlbumsTracks</button>
+                <input id="albumID" type="number" min="0" placeholder="Album Id"/>
             </div>
 
             <div id="playlist" class="row">
@@ -85,8 +86,8 @@
         <!--footer-->
         <footer class="row">
             <div class="col-lg-12">&copy; 2015 All Rights Reserved </br>
-                Contacts : <a href="mailto:drouet.remy@gmail.com">DAITA Jordan</a> &
-                <a href="mailto:	jordandaita@gmail.com">DROUET Rémy</a> &
+                Contacts : <a href="mailto:">DAITA Jordan</a> &
+                <a href="mailto:">DROUET Rémy</a> &
                 <a href="mailto:elisaling88@gmail.com">LI Ling</a>
             </div>
         </footer>
@@ -153,11 +154,11 @@
                 this.updatePlaylist();
             };
 
-            this.updateCatalogue = function() {
-                this.albums = this.musicPlayer.getAlbums();
-                for(var i=0;i<this.albums.length;i++){
-                    this.musicPlayer.putAlbumTracks(this.albums[i].id);
+            this.addAlbumsTracks = function() {
+                if(!$("#albumID").is(":empty")) {
+                    this.musicPlayer.putAlbumTracks($("#albumID").val());
                 }
+                else alert("Champs albumID vide");
             }
 
             this.updatePlaylist = function () {
@@ -165,12 +166,6 @@
                 this.currentTrack   = this.musicPlayer.getCurrentTrack();
                 this.proposedTracks = this.musicPlayer.getProposedTracks();
                 this.previousTracks = this.musicPlayer.getPreviousTracks();
-                this.albums         = this.musicPlayer.getAlbums();
-
-                //for(var i=0;i<this.albums.length;i++){
-                    console.log(this.albums[0].id);
-                    this.musicPlayer.putAlbumTracks(JSON.stringify(this.albums[0].id));
-                //}
 
                 this.getTrackInfo();
                 this.getAllTracksInfo();
@@ -185,7 +180,8 @@
             var currentTrack   = null;
             var proposedTracks = [60946206, 60946207, 60946208, 60946209];
             var previousTracks = [ ];
-            var albums         = null;
+            var albums         = [ ];
+            var tracks         = [ ]
 
             this.getCurrentTrack = function(){
                 return currentTrack;
@@ -208,6 +204,10 @@
             this.getAlbums = function(){
                 return albums;
             }
+
+            this.getTracks = function(){
+                return tracks;
+            }
         } // class
     </script>
 
@@ -219,7 +219,9 @@
             var PREVIOUS_TRACKS_URI = 'http://localhost:3000/playlist/previousTracks';
             var NEXT_TRACK_URI      = 'http://localhost:3000/playlist/nextTrack';
             var GET_ALBUMS          = 'http://localhost:3000/albums';
-            var PUT_ALBUMS          = 'http://localhost:3000/tracks/album/{_}';
+            var GET_TRACKS          = 'http://localhost:3000/tracks';
+            var PUT_ALBUMS_TRACKS   = 'http://localhost:3000/tracks/album/{_}';
+            var PUT_PROPOSED_TRACK  = 'http://localhost:3000/playlist/{_}';
 
             this.getCurrentTrack = function(){
                 var currentTrack = this.doRequest('GET', CURRENT_TRACK_URI, null);
@@ -246,8 +248,18 @@
                 return albums;
             };
 
+            this.getTracks = function () {
+                var tracks = this.doRequest('GET', GET_TRACKS, null);
+                return tracks;
+            }
+
             this.putAlbumTracks = function(albumID){
-                var url = PUT_ALBUMS.replace('{_}',albumID);
+                var url = PUT_ALBUMS_TRACKS.replace('{_}',albumID);
+                this.doRequest('PUT', url, null);
+            }
+
+            this.putProposedTrack = function(trackID) {
+                var url = PUT_PROPOSED_TRACK.replace('{_}',trackID);
                 this.doRequest('PUT', url, null);
             }
 
