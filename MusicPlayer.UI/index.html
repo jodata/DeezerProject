@@ -45,7 +45,28 @@
                 <input id="albumID" type="number" min="0" placeholder="Album Id"/>
             </div>
             <div id="tab-content">
+                <div id="playlist" class="row">
+                    <h3>Playlist</h3>
+                    <!-- Contains the track that is being played-->
+                    <p><b>{{musicPlayer.currentTrackName}}</b></p>
+                    <p>{{musicPlayer.currentTrackArtist}}</p>
+                    <!-- <img src={{musicPlayer.currentTrackThumbailURL}}></img>-->
+                    <!-- Table containing the proposed tracks-->
+                    <table>
+                        <th>Next tracks : </th>
+                        <tr ng-repeat="track in musicPlayer.proposedTracksName">
+                            <td>{{track}}</td>
+                        </tr>
+                    </table>
+                </div>
 
+                <!--playlist-->
+                <div class="row">
+                    <div class="col-sm-3 col-colored">Titre</div>
+                    <div class="col-sm-3 col-neutral">Artist</div>
+                    <div class="col-sm-3 col-colored">Album</div>
+                    <div class="col-sm-3 col-neutral">Voter</div>
+                </div>
             </div>
         </div>
 
