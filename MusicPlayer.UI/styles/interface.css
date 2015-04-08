@@ -1,7 +1,11 @@
 body {
     padding-top: 50px;
-    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    font-family: Menlo, Monaco, Consolas, "Myanmar Text", monospace;
     font-weight: bold;
+}
+
+a {
+    color: grey;
 }
 
 .row {
@@ -32,7 +36,6 @@ body {
     margin-right: -21px;
     margin-bottom: 20px;
     margin-left: -5px;
-    /*font-style: oblique;*/
 }
 
 .col-sm-9{
@@ -43,8 +46,3 @@ body {
 .col-lg-12{
     margin-top: 100px;
 }
-
-/*
-.h3{
-    font-style: oblique;
-}*/

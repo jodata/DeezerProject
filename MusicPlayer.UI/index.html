@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Projet web : music player</title>
+    <title>Get The Sound</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="scripts/angular.min.js"></script>
@@ -15,19 +15,10 @@
 
 <body ng-app="MusicPlayerApp">
     <!--barre en haut-->
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">Let's music!</a>
-            </div>
-            <div>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#"><span class="glyphicon glyphicon-asterisk"></span> Changer de style</a></li>
-                </ul>
-           </div>
-        </div>
-    </nav>
-
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-brand navbar-left"><a href="#">Share the Sound</a></div>
+        <div class="btn navbar-btn navbar-right"><span class="glyphicon glyphicon-asterisk"></span> Changer de style</div>
+    </div>
     <div class="container">
 
         <!--<button type="submit" class="btn btn-primary btn-sm">
@@ -40,53 +31,50 @@
 
             <!--menu à droite-->
             <div class="col-sm-3 col-md-2 sidebar">
-               <ul class="nav nav-sidebar">
-                   <li><a href="#"> Playlist</a></li>
-               </ul>
-               <ul class="nav nav-sidebar">
-                   <li><a href="#"> Albums</a></li>
-               </ul>
-               <ul class="nav nav-sidebar">
-                   <li><a href="#"> Gérer les albums</a></li>
-               </ul>
-           </div>
+                <ul class="nav nav-sidebar">
+                    <li><a href="#" ng-click="musicPlayer.updateContent('playlist')">Playlist</a></li>
+                    <li><a href="#">Catalogue</a></li>
+                    <li><a href="#">Gérer le catalogue</a></li>
+                </ul>
+            </div>
 
             <!--<h3>Controls</h3>-->
             <div class="row">
-                <button class="btn" type="button" ng-click="musicPlayer.playNextTrack();"> Suivant</button>
-                <button type="button" ng-click="musicPlayer.updateCatalogue();">Update DB</button>
+                <button class="btn" type="button" ng-click="musicPlayer.playNextTrack();">Suivant</button>
+                <button class="btn" type="button" ng-click="musicPlayer.addAlbumsTracks();">AddAlbumsTracks</button>
+                <input id="albumID" type="number" min="0" placeholder="Album Id"/>
             </div>
+            <div id="tab-content">
+                <div id="playlist" class="row">
+                    <h3>Playlist</h3>
+                    <!-- Contains the track that is being played-->
+                    <p><b>{{musicPlayer.currentTrackName}}</b></p>
+                    <p>{{musicPlayer.currentTrackArtist}}</p>
+                    <!-- <img src={{musicPlayer.currentTrackThumbailURL}}></img>-->
+                    <!-- Table containing the proposed tracks-->
+                    <table>
+                        <th>Next tracks : </th>
+                        <tr ng-repeat="track in musicPlayer.proposedTracksName">
+                            <td>{{track}}</td>
+                        </tr>
+                    </table>
+                </div>
 
-            <div id="playlist" class="row">
-                <h3>Playlist</h3>
-                <!-- Contains the track that is being played-->
-                <p><b>{{musicPlayer.currentTrackName}}</b></p>
-                <p>{{musicPlayer.currentTrackArtist}}</p>
-                <!-- <img src={{musicPlayer.currentTrackThumbailURL}}></img>-->
-                <!-- Table containing the proposed tracks-->
-                <table>
-                    <th>Next tracks : </th>
-                    <tr ng-repeat="track in musicPlayer.proposedTracksName">
-                        <td>{{track}}</td>
-                    </tr>
-                </table>
+                <!--playlist-->
+                <div class="row">
+                    <div class="col-sm-3 col-colored">Titre</div>
+                    <div class="col-sm-3 col-neutral">Artist</div>
+                    <div class="col-sm-3 col-colored">Album</div>
+                    <div class="col-sm-3 col-neutral">Voter</div>
+                </div>
             </div>
-
-            <!--playlist-->
-            <div class="row">
-                <div class="col-sm-3" style="background-color: lavender;"> Titre</div>
-                <div class="col-sm-3" style="background-color: lavenderblush;"> Artist</div>
-                <div class="col-sm-3" style="background-color: lavender;"> Album</div>
-                <div class="col-sm-3" style="background-color: lemonchiffon;"> Voter</div>
-            </div>
-
         </div>
 
         <!--footer-->
         <footer class="row">
             <div class="col-lg-12">&copy; 2015 All Rights Reserved </br>
-                Contacts : <a href="mailto:drouet.remy@gmail.com">DAITA Jordan</a> &
-                <a href="mailto:	jordandaita@gmail.com">DROUET Rémy</a> &
+                Contacts : <a href="mailto:">DAITA Jordan</a> &
+                <a href="mailto:">DROUET Rémy</a> &
                 <a href="mailto:elisaling88@gmail.com">LI Ling</a>
             </div>
         </footer>
@@ -119,7 +107,7 @@
             this.proposedTracks = null;
             this.proposedTracksName = null;
             this.previousTracks = null;
-            this.albums = null;
+            this.albums = this.musicPlayer.getAlbums();
 
             this.currentTrackName  = null;
             this.currentTrackArtist = null;
@@ -153,29 +141,35 @@
                 this.updatePlaylist();
             };
 
-            this.updateCatalogue = function() {
-                this.albums = this.musicPlayer.getAlbums();
-                for(var i=0;i<this.albums.length;i++){
-                    this.musicPlayer.putAlbumTracks(this.albums[i].id);
+            this.addAlbumsTracks = function() {
+                if(!$("#albumID").is(":empty")) {
+                    this.musicPlayer.putAlbumTracks($("#albumID").val());
                 }
-            }
+                else alert("Champs albumID vide");
+            };
 
             this.updatePlaylist = function () {
 
                 this.currentTrack   = this.musicPlayer.getCurrentTrack();
                 this.proposedTracks = this.musicPlayer.getProposedTracks();
                 this.previousTracks = this.musicPlayer.getPreviousTracks();
-                this.albums         = this.musicPlayer.getAlbums();
-
-                //for(var i=0;i<this.albums.length;i++){
-                    console.log(this.albums[0].id);
-                    this.musicPlayer.putAlbumTracks(JSON.stringify(this.albums[0].id));
-                //}
 
                 this.getTrackInfo();
                 this.getAllTracksInfo();
-            }
+            };
 
+            this.updateContent = function(contentName){
+                $.ajax({
+                    url:  "tabs/"+contentName+".html",
+                    async: false,
+                    success: function(content) {
+                        $("#tab-content").html(content);
+                    },
+                    error: function(xhr) {
+                        console.log("Erreur lors du chargement de contenu de l\'onglet :" + contentName);
+                    }
+                });
+            };
         } // class
     </script>
 
@@ -185,7 +179,8 @@
             var currentTrack   = null;
             var proposedTracks = [60946206, 60946207, 60946208, 60946209];
             var previousTracks = [ ];
-            var albums         = null;
+            var albums         = [ ];
+            var tracks         = [ ]
 
             this.getCurrentTrack = function(){
                 return currentTrack;
@@ -208,6 +203,10 @@
             this.getAlbums = function(){
                 return albums;
             }
+
+            this.getTracks = function(){
+                return tracks;
+            }
         } // class
     </script>
 
@@ -219,7 +218,9 @@
             var PREVIOUS_TRACKS_URI = 'http://localhost:3000/playlist/previousTracks';
             var NEXT_TRACK_URI      = 'http://localhost:3000/playlist/nextTrack';
             var GET_ALBUMS          = 'http://localhost:3000/albums';
-            var PUT_ALBUMS          = 'http://localhost:3000/tracks/album/{_}';
+            var GET_TRACKS          = 'http://localhost:3000/tracks';
+            var PUT_ALBUMS_TRACKS   = 'http://localhost:3000/tracks/album/{_}';
+            var PUT_PROPOSED_TRACK  = 'http://localhost:3000/playlist/{_}';
 
             this.getCurrentTrack = function(){
                 var currentTrack = this.doRequest('GET', CURRENT_TRACK_URI, null);
@@ -246,8 +247,18 @@
                 return albums;
             };
 
+            this.getTracks = function () {
+                var tracks = this.doRequest('GET', GET_TRACKS, null);
+                return tracks;
+            }
+
             this.putAlbumTracks = function(albumID){
-                var url = PUT_ALBUMS.replace('{_}',albumID);
+                var url = PUT_ALBUMS_TRACKS.replace('{_}',albumID);
+                this.doRequest('PUT', url, null);
+            }
+
+            this.putProposedTrack = function(trackID) {
+                var url = PUT_PROPOSED_TRACK.replace('{_}',trackID);
                 this.doRequest('PUT', url, null);
             }
 
