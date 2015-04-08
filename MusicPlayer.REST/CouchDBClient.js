@@ -2,7 +2,6 @@ var httpClient = require('./httpClient');
 
 var CouchDBClient = module.exports = function() {
     var couchDBPath = "http://localhost:5984/deezer/{_}";
-    var couchDBrevPath = "http://localhost:5984/_design/app?rev="
 
     this.GET = function(table,callback){
         var url = couchDBPath.replace('{_}', encodeURIComponent(table));

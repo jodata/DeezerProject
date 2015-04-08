@@ -17,8 +17,8 @@
    inkscape:version="0.91 r13725"
    sodipodi:docname="logo.svg"
    inkscape:export-filename="C:\Users\Rémy\WebstormProjects\DeezerProject\MusicPlayer.UI\img\logo.png"
-   inkscape:export-xdpi="188.82001"
-   inkscape:export-ydpi="188.82001">
+   inkscape:export-xdpi="176.84"
+   inkscape:export-ydpi="176.84">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -29,8 +29,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.49497475"
-     inkscape:cx="510.60201"
-     inkscape:cy="398.74675"
+     inkscape:cx="632.82368"
+     inkscape:cy="399.7569"
      inkscape:document-units="px"
      inkscape:current-layer="layer6"
      showgrid="false"
@@ -197,23 +197,31 @@
        d="m 284.61493,422.3622 c 0,-23.03433 -34.28571,-6.29584 -50,0 -118.75196,62.82864 -118.75196,265.84194 0,335.71429 28.21404,13.6469 51.129,21.03124 50,0 z"
        id="path4144"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccc" />
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-xdpi="237.17648"
+       inkscape:export-ydpi="237.17648" />
     <path
        style="fill:#ff8300;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 304.92394,422.3622 c 0,-23.79194 52.52793,-23.79194 52.52793,0 l 0,335.71429 c 0,27.14286 -52.52793,27.14286 -52.52793,0 z"
        id="path4156"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccc" />
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-xdpi="237.17648"
+       inkscape:export-ydpi="237.17648" />
     <path
        style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 210,412.36219 c 4.05693,-9.86758 70.28389,-39.09796 116.14829,-40 C 331.4302,259.48466 375.0489,214.21329 546,212.94408 l 1.28572,-65.48944 C 317.71119,146.08899 210,238.48248 210,412.36219 Z"
        id="path4166"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccc" />
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-xdpi="237.17648"
+       inkscape:export-ydpi="237.17648" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5.34073877;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 547.14286,102.36221 0,728.57143 z"
        id="path4168"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       inkscape:export-xdpi="237.17648"
+       inkscape:export-ydpi="237.17648" />
   </g>
 </svg>
