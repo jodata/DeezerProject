@@ -1,23 +1,20 @@
 body {
-    padding-top: 50px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
     font-family: Menlo, Monaco, Consolas, "Myanmar Text", monospace;
     font-weight: bold;
 }
 
 a {
-    color: grey;
+    text-decoration: none;
+    color: inherit;
 }
 
-.row {
-    margin-bottom: 30px;
+.footer{
     text-align: center;
-    margin-left: 15%;
 }
-
-.col-sm-3 {
-    background-color: lavender;
-}
-
 .sidebar {
     position: fixed;
     top: 51px;
@@ -45,4 +42,50 @@ a {
 
 .col-lg-12{
     margin-top: 100px;
+}
+
+.tab-content{
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.accordeon-title{
+    display: inline-block;
+}
+
+.accordeon-img {
+
+}
+
+.accordeon-content {
+
+}
+
+.accordeon-item {
+    margin-top: 5px;
+    /*float:left;*/
+    position:relative;
+    display: inline-block;
+    width:100%;
+}
+
+#accordion a{
+    text-decoration: none;
+}
+
+#accordion{
+    -webkit-column-count: 3; /* Chrome, Safari, Opera */
+    -moz-column-count: 3; /* Firefox */
+    column-count: 3;
+}
+
+@media only screen and (max-width:760px) {
+    #accordion {
+        -webkit-column-count: 1; /* Chrome, Safari, Opera */
+        -moz-column-count: 1; /* Firefox */
+        column-count: 1;
+    }
+    .accordeon-img {
+        width: 33%;
+    }
 }

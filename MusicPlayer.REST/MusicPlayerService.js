@@ -28,6 +28,10 @@ var notInTable = function(data,id,callback){
     callback(-1);
 };
 
+/**********
+ * GETTER *
+ **********/
+
 app.get('/playlist/currentTrack', function (request, response) {
     response.json(currentTrack);
 });
@@ -67,6 +71,10 @@ app.get('/tracks/:id', function (request, response) {
     });
 });
 
+/**********
+ *   PUT  *
+ **********/
+
 app.put('/tracks/album/:albumID', function (request, response) {
     if(!isPutting) {
         var albumID = request.params.albumID;
@@ -97,11 +105,6 @@ app.put('/tracks/album/:albumID', function (request, response) {
     }
 });
 
-app.get('/test/params', function (request, response) {
-    var param = request.params.name;
-    response.send(param);
-})
-
 app.put('/playlist/:trackID', function(request, response) {
     var trackID = request.params.trackID;
     new couchDBClient.GETall("ProposedTracks", function(jsonData){
@@ -119,6 +122,9 @@ app.put('/playlist/:trackID', function(request, response) {
     });
 });
 
+/**********
+ *  POST  *
+ **********/
 app.post('/playlist/nextTrack', function (request, response) {
     previousTracks.push(currentTrack);
     currentTrack = proposedTracks.shift();

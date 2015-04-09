@@ -1,15 +1,21 @@
 <!--barre en haut-->
-<div class="navbar navbar-inverse navbar-fixed-top">
-    <div class="navbar-brand navbar-left"><a href="#/">Share the Sound</a></div>
-    <div class="btn navbar-btn navbar-right"><span class="glyphicon glyphicon-asterisk"></span> Changer de style</div>
-</div>
-<div class="container">
-
-
-        <!--menu à gauche-->
-        <div class="col-sm-3 col-md-2 sidebar">
-            <ul class="nav nav-sidebar">
-                <li><a href="#/">Playlist</a></li>
-                <li><a href="#/catalogue">Catalogue</a></li>
-            </ul>
+<div class="navbar navbar-inverse navbar-static-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#/">
+                Share The Sound
+            </a>
         </div>
+
+        <ul class="nav navbar-nav">
+            <li class="active active-plus"><a href="#/home" ng-click="music">Playlist</a></li>
+            <li><a href="#/catalogue">Catalogue</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a href="#/"><span class="glyphicon glyphicon-asterisk"></span>
+                    Changer de style</a>
+            </li>
+        </ul>
+    </div>
+</div>
