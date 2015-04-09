@@ -1,0 +1,21 @@
+<div ng-controller="MusicPlayerController as musicPlayer">
+
+<div ng-include="'includes/nav.html'"></div>
+
+    <div id="tab-content">
+        <div id="catalogue" class="row">
+            <h3>Catalogue</h3>
+        </div>
+
+        <!--playlist-->
+        <div class="row">
+            <div class="col-sm-3 col-colored">Titre</div>
+            <tr ng-repeat="tracks in musicPlayer.catalogueTracks">
+                <td>{{tracks}}</td>
+            </tr>
+            <div class="col-sm-3 col-neutral">Artist</div>
+            <div class="col-sm-3 col-colored">Album</div>
+            <div class="col-sm-3 col-neutral">Ajouter</div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,42 @@
+<div ng-controller="MusicPlayerController as musicPlayer">
+
+    <!--<button type="submit" class="btn btn-primary btn-sm">
+    <span class="glyphicon glyphicon-eye-open"></span> Connectez-vous</button>-->
+
+    <div id="dz-root" class="row"></div>
+    <div id="dz-player" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"></div>
+
+
+
+    <!--<h3>Controls</h3>-->
+    <div class="row">
+        <button class="btn" type="button" ng-click="musicPlayer.playNextTrack();">Suivant</button>
+        <button class="btn" type="button" ng-click="musicPlayer.addAlbumsTracks();">AddAlbumsTracks</button>
+        <input id="albumID" type="number" min="0" max="10" placeholder="Album Id"/>
+    </div>
+    <div id="tab-content">
+        <div id="playlist" class="row">
+            <h3>Playlist</h3>
+            <!-- Contains the track that is being played-->
+            <p><b>{{musicPlayer.currentTrackName}}</b></p>
+            <p>{{musicPlayer.currentTrackArtist}}</p>
+            <!-- <img src={{musicPlayer.currentTrackThumbailURL}}></img>-->
+            <!-- Table containing the proposed tracks-->
+            <table>
+                <th>Next tracks : </th>
+                {{musicPlayer.proposedTracksName}}
+                <tr ng-repeat="track in musicPlayer.proposedTracksName">
+                    <td>{{track}}</td>
+                </tr>
+            </table>
+        </div>
+
+        <!--playlist-->
+        <div class="row">
+            <div class="col-sm-3 col-colored">Titre</div>
+            <div class="col-sm-3 col-neutral">Artist</div>
+            <div class="col-sm-3 col-colored">Album</div>
+            <div class="col-sm-3 col-neutral">Voter</div>
+        </div>
+    </div>
+</div>
