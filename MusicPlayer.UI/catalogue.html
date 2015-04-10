@@ -1,21 +1,38 @@
 <div ng-controller="MusicPlayerController as musicPlayer">
 
-<div ng-include="'includes/nav.html'"></div>
+    <div id="tab-content" class="container">
+        <input type="text" placeholder="Search..." class="form-control" ng-model="query"/>
 
-    <div id="tab-content">
-        <div id="catalogue" class="row">
-            <h3>Catalogue</h3>
-        </div>
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default accordeon-item clearfix"
+                 ng-repeat="album in musicPlayer.albums | filter:query">
+                <div class="panel-heading" role="tab" id={{"heading"+$index}}>
+                    <h4 class="panel-title">
+                        <a class="collapsed"
+                           title="{{album.title}}{{' de '+album.artist}}"
+                           data-toggle="collapse"
+                           data-parent="#accordion"
+                           href={{"/#collapse"+$index}}
+                           aria-expanded="false"
+                           aria-controls={{"collapse"+$index}}>
+                            <img src={{album.cover}} class="accordeon-img img-rounded">
 
-        <!--playlist-->
-        <div class="row">
-            <div class="col-sm-3 col-colored">Titre</div>
-            <tr ng-repeat="tracks in musicPlayer.catalogueTracks">
-                <td>{{tracks}}</td>
-            </tr>
-            <div class="col-sm-3 col-neutral">Artist</div>
-            <div class="col-sm-3 col-colored">Album</div>
-            <div class="col-sm-3 col-neutral">Ajouter</div>
+                            <div class="accordeon-title">
+                                <span>{{album.title|limitTo:15}}{{album.title.length > 12 ? '...' : ''}}</span>
+                                <div>
+                                    <strong>{{album.artist|limitTo:12}}{{album.artist.length > 15 ? '...' :''}}</strong>
+                                </div>
+                            </div>
+                        </a>
+                    </h4>
+                </div>
+                <div id={{"collapse"+$index}} class="panel-collapse collapse accordeon-content" role="tabpanel"
+                     aria-labelledby={{"heading"+$index}}>
+                    <div class="panel-body">
+                        Salut ca marche
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -4,11 +4,6 @@
     <title>Get The Sound</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="scripts/angular.min.js"></script>
-    <script src="scripts/angular-route.min.js"></script>
-    <script src="scripts/jquery.min.js"></script>
-    <!--bootstrap -->
-    <script src="scripts/bootstrap.min.js"></script>
     <link href="styles/bootstrap.min.css" rel="stylesheet">
     <!--style css pour l'interface-->
     <link href="styles/interface.css" rel="stylesheet">
@@ -20,7 +15,13 @@
     <div ng-view></div>
     <div ng-include="'includes/footer.html'"></div>
 
-    <!--Scripts-->
+    <script src="scripts/angular.min.js"></script>
+    <script src="scripts/angular-route.min.js"></script>
+    <script src="scripts/jquery.min.js"></script>
+    <!--bootstrap -->
+    <script src="scripts/bootstrap.min.js"></script>
+    <script src="scripts/animation.js"></script>
+    <!-- MVC -->
     <script src="http://cdn-files.deezer.com/js/min/dz.js"></script>
     <script>
         DZ.init({
@@ -39,9 +40,8 @@
 
         app.config(function($routeProvider){
             $routeProvider
-                    .when('/', {templateUrl: 'home.html'})
-                    .when('/catalogue', {templateUrl: 'catalogue.html'})
-                    .otherwise({redirectTo : '/'});
+                    .when('/home', {templateUrl: 'home.html'})
+                    .when('/catalogue', {templateUrl: 'catalogue.html'});
         });
 
         app.controller('MusicPlayerController', MusicPlayerController);
