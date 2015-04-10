@@ -86,17 +86,18 @@ app.put('/tracks/album/:albumID', function (request, response) {
                     for (var i = 0; i < tracks.length; i++) {
                         notInTable(jsonData.data, tracks[i].id, function (id) {
                             if (id == -1) {
+                                console.log(tracks[i].title);
                                 jsonData.data.push(JSON.parse('{' +
                                 '"deezerID" : "' + tracks[i].id +
                                 '", "title" : "' + tracks[i].title +
                                 '", "preview" : "' + tracks[i].preview +
                                 '", "albumID" : "' + albumID +
                                 '"}'));
-                            }
+                            } else console.log("in Table");
                         });
                     }
-                    couchDBClient.PUT('Tracks', jsonData, function () {
-                        console.log("done");
+                    couchDBClient.PUT('Tracks', jsonData, function (res) {
+                        console.log(res);
                         response.end();
                     });
                 });

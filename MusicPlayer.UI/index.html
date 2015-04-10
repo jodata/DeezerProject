@@ -59,6 +59,7 @@
             this.proposedTracksName = null;
             this.previousTracks = null;
             this.albums = this.musicPlayer.getAlbums();
+            this.tracks = this.musicPlayer.getTracks();
             this.catalogueTracks = this.musicPlayer.getTracks();
 
             this.currentTrackName  = null;
@@ -86,6 +87,16 @@
                         $scope.$apply();
                     });
                 }
+            };
+
+            this.filterTracks = function (albumID){
+                var res = [];
+                angular.forEach(this.tracks, function(track, i){
+                    if(track.albumID == albumID)
+                        res.push(track);
+                });
+                console.log(res);
+                return res;
             };
             <!--passer à la chanson suivante et mettre à jour la playlist -->
             this.playNextTrack = function() {
@@ -125,45 +136,10 @@
             };
         } // class
     </script>
-
     <script>
-        function MusicPlayerLocalClient(){
-
-            var currentTrack   = null;
-            var proposedTracks = [60946206, 60946207, 60946208, 60946209];
-            var previousTracks = [ ];
-            var albums         = [ ];
-            var tracks         = [ ]
-
-            this.getCurrentTrack = function(){
-                return currentTrack;
-            };
-
-            this.getProposedTracks = function (){
-                return proposedTracks;
-            };
-
-            this.getPreviousTracks = function(){
-                return previousTracks;
-            };
-
-            this.getNextTrack = function(){
-                previousTracks.push(currentTrack);
-                currentTrack = proposedTracks.shift();
-                return currentTrack;
-            };
-
-            this.getAlbums = function(){
-                return albums;
-            }
-
-            this.getTracks = function(){
-                return tracks;
-            }
-        } // class
-    </script>
-
-    <script>
+        /***************************************
+         * client qui interagit avec le serveur *
+         ****************************************/
         function MusicPlayerRestClient(){
 
             var CURRENT_TRACK_URI   = 'http://localhost:3000/playlist/currentTrack';

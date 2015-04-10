@@ -58,7 +58,8 @@ a {
 }
 
 .accordeon-content {
-
+    max-height: 200px;
+    overflow: scroll;
 }
 
 .accordeon-item {

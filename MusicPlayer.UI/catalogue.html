@@ -6,11 +6,11 @@
         <!--display des tracks sous forme d'un tableau avec accordion-bootstrap-->
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
             <div class="panel panel-default accordeon-item clearfix"
-                 ng-repeat="album in musicPlayer.albums | filter:query">
+                 ng-repeat="(fIndex, album) in musicPlayer.albums | filter:query">
                 <div class="panel-heading" role="tab" id={{"heading"+$index}}>
                     <h4 class="panel-title">
                         <a class="collapsed"
-                           title="{{album.title}}{{' de '+album.artist}}"
+                           title="{{album.title}}{{' - '+album.artist}}"
                            data-toggle="collapse"
                            data-parent="#accordion"
                            href={{"/#collapse"+$index}}
@@ -19,9 +19,9 @@
                             <img src={{album.cover}} class="accordeon-img img-rounded">
 
                             <div class="accordeon-title">
-                                <span>{{album.title|limitTo:15}}{{album.title.length > 12 ? '...' : ''}}</span>
+                                <span>{{album.title|limitTo:12}}{{album.title.length > 12 ? '...' : ''}}</span>
                                 <div>
-                                    <strong>{{album.artist|limitTo:12}}{{album.artist.length > 15 ? '...' :''}}</strong>
+                                    <strong>{{album.artist|limitTo:12}}{{album.artist.length > 12 ? '...' :''}}</strong>
                                 </div>
                             </div>
                         </a>
@@ -30,7 +30,12 @@
                 <div id={{"collapse"+$index}} class="panel-collapse collapse accordeon-content" role="tabpanel"
                      aria-labelledby={{"heading"+$index}}>
                     <div class="panel-body">
-                        Salut ca marche
+                        <table class="table table-striped">
+                            <tr ng-repeat="track in musicPlayer.filterTracks(fIndex)">
+                                <td>{{$index+1}}</td>
+                                <td>{{track.title}}</td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
