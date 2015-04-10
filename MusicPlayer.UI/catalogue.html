@@ -1,8 +1,9 @@
 <div ng-controller="MusicPlayerController as musicPlayer">
 
     <div id="tab-content" class="container">
+        <!--recherche des musiques en ajax-->
         <input type="text" placeholder="Search..." class="form-control" ng-model="query"/>
-
+        <!--display des tracks sous forme d'un tableau avec accordion-bootstrap-->
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
             <div class="panel panel-default accordeon-item clearfix"
                  ng-repeat="album in musicPlayer.albums | filter:query">
