@@ -89,3 +89,43 @@ a {
         width: 33%;
     }
 }
+
+/*Home.html*/
+.playlist-track{
+    background-color: #EEE;
+    display: block;
+    margin-top: 5px;
+    text-align: center;
+    width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+    .playlist-track img{
+        display: inline-block;
+        width: 100px;
+    }
+    .playlist-track span{
+        display: inline-block;
+    }
+.previous-item{
+
+}
+.current-item{
+
+    border:solid 2px darkorange;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    padding: 5px;
+}
+.current-item img{
+    width: 180px;
+}
+.current-item span{
+    font-size: xx-large;
+}
+
+.next-item-badge{
+    display: inline-block;
+    background-color: darkorange;
+}
