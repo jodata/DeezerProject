@@ -1,3 +1,4 @@
+/*index.html*/
 body {
     margin: 0;
     padding: 0;
@@ -12,56 +13,28 @@ a {
     color: inherit;
 }
 
+/*footer*/
 .footer{
     text-align: center;
 }
-.sidebar {
-    position: fixed;
-    top: 51px;
-    bottom: 0px;
-    left: 0px;
-    z-index: 1000;
-    display: block;
-    padding: 20px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    background-color: #F5F5F5;
-    border-right: 1px solid #EEE;
-}
 
-.nav-sidebar {
-    margin-right: -21px;
-    margin-bottom: 20px;
-    margin-left: -5px;
-}
-
-.col-sm-9{
-    width:80%;
-    margin-bottom: 30px;
-}
-
-.col-lg-12{
-    margin-top: 100px;
-}
-
+/*centrer home.html & catalogue.html*/
 .tab-content{
     margin-right: auto;
     margin-left: auto;
 }
 
+/*catalogue.html*/
 .accordeon-title{
     display: inline-block;
 }
-
 .accordeon-img {
 
 }
-
 .accordeon-content {
     max-height: 200px;
     overflow: scroll;
 }
-
 .accordeon-item {
     margin-top: 5px;
     /*float:left;*/
@@ -69,11 +42,9 @@ a {
     display: inline-block;
     width:100%;
 }
-
 #accordion a{
     text-decoration: none;
 }
-
 #accordion{
     -webkit-column-count: 3; /* Chrome, Safari, Opera */
     -moz-column-count: 3; /* Firefox */
@@ -91,13 +62,17 @@ a {
     }
 }
 
-/*Home.html*/
+/*home.html*/
+.container{
+    margin-bottom: 10px;
+}
+
 .playlist-track{
-    background-color: #EEE;
+    background-color:#EEE;
     display: block;
-    margin-top: 5px;
     text-align: center;
     width: 700px;
+    margin-top: 5px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -109,24 +84,42 @@ a {
         display: inline-block;
     }
 .previous-item{
+    overflow-x: hidden;
 
 }
+    .previous-item span{
+        font-size:small;
+    }
 .current-item{
-
-    border:solid 2px darkorange;
+    border:solid 3px darkorange;
     -webkit-border-radius: 15px;
     -moz-border-radius: 15px;
     border-radius: 15px;
     padding: 5px;
+    background-color:#f7ecb5;
 }
-.current-item img{
-    width: 180px;
-}
-.current-item span{
-    font-size: xx-large;
-}
-
+    .current-item img{
+        width: 180px;
+    }
+    .current-item span{
+        font-size: xx-large;
+    }
+    .btn-play{
+        font-size:larger;
+        margin-right: 5%;
+        background-color: orangered;
+    }
+    .btn-play:hover{
+        color: #EEEEEE;
+    }
 .next-item-badge{
     display: inline-block;
     background-color: darkorange;
 }
+    .locked{
+        color:orangered;
+    }
+    .btn-voter{
+        color: darkorange;
+        font-size: larger;
+    }

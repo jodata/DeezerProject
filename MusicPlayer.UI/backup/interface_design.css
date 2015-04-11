@@ -1,0 +1,29 @@
+/**/
+.sidebar {
+    position: fixed;
+    top: 51px;
+    bottom: 0px;
+    left: 0px;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #F5F5F5;
+    border-right: 1px solid #EEE;
+}
+
+.nav-sidebar {
+    margin-right: -21px;
+    margin-bottom: 20px;
+    margin-left: -5px;
+}
+
+.col-sm-9{
+    width:80%;
+    margin-bottom: 30px;
+}
+
+.col-lg-12{
+    margin-top: 100px;
+}
