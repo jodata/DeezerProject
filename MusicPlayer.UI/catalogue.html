@@ -31,7 +31,7 @@
                      aria-labelledby={{"heading"+$index}}>
                     <div class="panel-body">
                         <table class="table table-striped">
-                            <tr ng-repeat="track in musicPlayer.filterTracks(fIndex)">
+                            <tr ng-repeat="track in musicPlayer.filterTracks(album.id)">
                                 <td>{{$index+1}}</td>
                                 <td>{{track.title}}</td>
                             </tr>

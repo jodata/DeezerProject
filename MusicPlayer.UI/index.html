@@ -91,8 +91,15 @@
 
             this.filterTracks = function (albumID){
                 var res = [];
-                angular.forEach(this.tracks, function(track, i){
-                    if(track.albumID == albumID)
+                var id = 0;
+                for(var i=0;i<this.albums.length;i++){
+                    if(this.albums[i].id == albumID) {
+                        id = i;
+                        break;
+                    }
+                }
+                angular.forEach(this.tracks, function(track, j){
+                    if(track.albumID == id)
                         res.push(track);
                 });
                 return res;
