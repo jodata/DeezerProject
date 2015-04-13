@@ -1,6 +1,4 @@
-/************
-*   COMMON  *
-*************/
+/*index.html*/
 body {
     margin: 0;
     padding: 0;
@@ -15,28 +13,28 @@ a {
     color: inherit;
 }
 
+/*footer*/
 .footer{
     text-align: center;
 }
 
+/*centrer home.html & catalogue.html*/
 .tab-content{
     margin-right: auto;
     margin-left: auto;
 }
 
-/****************
-*   Catalogue   *
-*****************/
-
+/*catalogue.html*/
 .accordeon-title{
     display: inline-block;
 }
+.accordeon-img {
 
+}
 .accordeon-content {
     max-height: 200px;
     overflow: scroll;
 }
-
 .accordeon-item {
     margin-top: 5px;
     /*float:left;*/
@@ -44,85 +42,14 @@ a {
     display: inline-block;
     width:100%;
 }
-
 #accordion a{
     text-decoration: none;
 }
-
 #accordion{
     -webkit-column-count: 3; /* Chrome, Safari, Opera */
     -moz-column-count: 3; /* Firefox */
     column-count: 3;
 }
-
-/********************
-*   Home/Playlist   *
-*********************/
-
-/* Common */
-.horizontal-gradient{
-
-}
-.playlist-track{
-    display: block;
-    margin-top: 5px;
-    text-align: center;
-    width: 700px;
-    margin-left: auto;
-    margin-right: auto;
-    -webkit-border-radius: 15px;
-    -moz-border-radius: 15px;
-    border-radius: 15px;
-    padding: 5px;
-}
-    .playlist-track img{
-        display: inline-block;
-    }
-    .playlist-track span{
-        display: inline-block;
-    }
-
-/*Current track*/
-#playlist-current-track{
-    border:groove 2px darkorange;
-}
-    #playlist-current-img{
-        width: 180px;
-    }
-    #playlist-current-text{
-        font-size: xx-large;
-    }
-
-/*Previous track*/
-.playlist-prev{
-    text-align: center;
-}
-    .playlist-previous-track{
-        display:inline-block;
-        width: 200px;
-    }
-        .playlist-previous-img{
-            width:60px;
-        }
-
-/*Next track*/
-.playlist-next-track{
-
-}
-    .playlist-next-img{
-        width: 100px;
-    }
-    .playlist-next-img::after{
-        background-color: #000;
-        opacity: 0.5;
-    }
-    .playlist-next-badge{
-        display: inline-block;
-        background-color: darkorange;
-    }
-/********************
-*   CSS for mobile  *
-*********************/
 
 @media only screen and (max-width:760px) {
     #accordion {
@@ -130,14 +57,69 @@ a {
         -moz-column-count: 1; /* Firefox */
         column-count: 1;
     }
-        .accordeon-img {
-            height: 60px;
-        }
-
-    .playlist-track{
-        width: 100%;
-    }
-    .playlist-track img{
+    .accordeon-img {
         width: 33%;
     }
 }
+
+/*home.html*/
+.container{
+    margin-bottom: 10px;
+}
+
+.playlist-track{
+    background-color:#EEE;
+    display: block;
+    text-align: center;
+    width: 700px;
+    margin-top: 5px;
+    margin-left: auto;
+    margin-right: auto;
+}
+    .playlist-track img{
+        display: inline-block;
+        width: 100px;
+    }
+    .playlist-track span{
+        display: inline-block;
+    }
+.previous-item{
+    overflow-x: hidden;
+
+}
+    .previous-item span{
+        font-size:small;
+    }
+.current-item{
+    border:solid 3px darkorange;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    padding: 5px;
+    background-color:#f7ecb5;
+}
+    .current-item img{
+        width: 180px;
+    }
+    .current-item span{
+        font-size: xx-large;
+    }
+    .btn-play{
+        font-size:larger;
+        margin-right: 5%;
+        background-color: orangered;
+    }
+    .btn-play:hover{
+        color: #EEEEEE;
+    }
+.next-item-badge{
+    display: inline-block;
+    background-color: darkorange;
+}
+    .locked{
+        color:orangered;
+    }
+    .btn-voter{
+        color: darkorange;
+        font-size: larger;
+    }
