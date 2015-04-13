@@ -1,21 +1,23 @@
 <!--barre en haut-->
-<div class="navbar navbar-inverse navbar-static-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#/">
-                Share The Sound
-            </a>
-        </div>
+<div ng-controller="MusicPlayerController as musicPlayer">
+    <div class="navbar navbar-inverse navbar-static-top" ng>
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#/">
+                    Share The Sound
+                </a>
+            </div>
 
-        <ul class="nav navbar-nav">
-            <li class="active active-plus"><a href="#/home" ng-click="music">Playlist</a></li>
-            <li><a href="#/catalogue">Catalogue</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                <a ng-click="" href="#/"><span class="glyphicon glyphicon-asterisk"></span>
-                    Changer de style</a>
-            </li>
-        </ul>
+            <ul class="nav navbar-nav">
+                <li class="active active-plus"><a href="#/home" ng-click="musicPlayer.activeNavItem($event)">Playlist</a></li>
+                <li><a href="#/catalogue"  ng-click="musicPlayer.activeNavItem($event)">Catalogue</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a ng-click="" href="#/"><span class="glyphicon glyphicon-asterisk"></span>
+                        Changer de style</a>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>

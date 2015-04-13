@@ -95,7 +95,6 @@
                     if(track.albumID == albumID)
                         res.push(track);
                 });
-                console.log(res);
                 return res;
             };
             <!--passer à la chanson suivante et mettre à jour la playlist -->
@@ -121,19 +120,10 @@
             <!-- ??? -->
             this.getAllTracksInfo();
 
-            <!--mise à jour de la table des musiques lors d'une recherche dans Catalogue-->
-            this.updateContent = function(contentName){
-                $.ajax({
-                    url:  "tabs/"+contentName+".html",
-                    async: false,
-                    success: function(content) {
-                        $("#tab-content").html(content);
-                    },
-                    error: function(xhr) {
-                        console.log("Erreur lors du chargement de contenu de l\'onglet :" + contentName);
-                    }
-                });
-            };
+            this.activeNavItem = function(e){
+                $(".navbar-nav>li.active").removeClass("active active-plus");
+                $(e.target.parentNode).addClass("active active-plus");
+            }
         } // class
     </script>
     <script>
