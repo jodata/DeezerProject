@@ -10,6 +10,10 @@
             <img src="img/test.png" class="img-rounded">
             <span>title - artist</span>
         </div>
+        <div ng-repeat="previousTrack in previousTracks" class="playlist-track previous-item">
+            <img src="img/test.png" class="img-rounded">
+            <span>{{previousTrack.title}} - {{previousTrack.artist}}</span>
+        </div>
 
         <!--currentTrack-->
         <div class="playlist-track current-item">
@@ -17,10 +21,20 @@
             <button class="btn glyphicon glyphicon-play btn-play" type="button"
                     ng-click="musicPlayer.playCurrentTrack();"></button>
             <img src="img/logo.png" class="img-rounded">
-            <span>title - artist</span>
+            <span>{{currentTrackName}} - {{currentTrackArtist}}</span>
         </div>
 
         <!--nextTracks-->
+
+        <div ng-repeat="proposedTrack in proposedTracks" class="playlist-track next-item">
+            <img src="img/test.png" class="img-rounded">
+            <span class="next-item-text">{{proposedTrack}} - {{proposedTrack}}</span>
+            <span class="badge next-item-badge">4</span>
+            <span class="locked">Next track !</span>
+            <!--bouton "Voter"-->
+            <button class="btn glyphicon glyphicon-thumbs-up btn-voter" type="button"></button>
+        </div>
+
         <div class="playlist-track next-item">
             <img src="img/test.png" class="img-rounded">
             <span class="next-item-text">title - artist</span>
@@ -43,6 +57,8 @@
             <!--bouton "Voter"-->
             <button class="btn glyphicon glyphicon-thumbs-up btn-voter" type="button"></button>
         </div>
+
+
     </div>
 </div>
 </div>
