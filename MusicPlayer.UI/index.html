@@ -44,14 +44,15 @@
         app.config(function($routeProvider){
             $routeProvider
                     .when('/home', {templateUrl: 'home.html'})
-                    .when('/catalogue', {templateUrl: 'catalogue.html'});
+                    .when('/catalogue', {templateUrl: 'catalogue.html'})
+                    .otherwise({redirectTo:'/home'});
         });
 
         app.controller('MusicPlayerController', MusicPlayerController);
 
         <!--Contrôle des ajouts des chansons, de la mise à jour de playlist-->
         function MusicPlayerController($scope){
-
+            this.loading = true;
             //this.musicPlayer = new MusicPlayerLocalClient();
             this.musicPlayer = new MusicPlayerRestClient();
             this.currentTrack   = null;

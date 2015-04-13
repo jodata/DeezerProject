@@ -62,6 +62,13 @@ a {
     }
 }
 
+#load-text{
+    text-align: center;
+    font-size: x-large;
+    color: darkorange;
+    margin-top: 20px;
+}
+
 /*home.html*/
 .container{
     margin-bottom: 10px;
