@@ -9,8 +9,9 @@
             </div>
 
             <ul class="nav navbar-nav">
-                <li class="active active-plus"><a href="#/home" ng-click="musicPlayer.activeNavItem($event)">Playlist</a></li>
-                <li><a href="#/catalogue"  ng-click="musicPlayer.activeNavItem($event)">Catalogue</a></li>
+                <li ng-class="{active:isActive('/home')}"><a ng-click="getTrackInfo()" href="#/home">Playlist</a></li>
+                <li ng-class="{active:isActive('/catalogue')}"><a href="#/catalogue">Catalogue</a></li>
+
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li>

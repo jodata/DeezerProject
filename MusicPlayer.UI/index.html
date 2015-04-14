@@ -10,12 +10,18 @@
 </head>
 
 <body ng-app="MusicPlayerApp">
-    <!--barre des onglets en haut-->
-    <div ng-include="'includes/nav.html'"></div>
-    <div ng-view></div>
-    <!--footer-->
-    <div ng-include="'includes/footer.html'"></div>
-    <!--javascript -->
+
+    <div id="dz-root" class="row"></div>
+
+
+    <div ng-controller="MusicPlayerController as musicPlayer">
+        <!--barre des onglets en haut-->
+        <div ng-include="'includes/nav.html'"></div>
+        <div ng-view></div>
+        <!--footer-->
+        <div ng-include="'includes/footer.html'"></div>
+        <!--javascript -->
+    </div>
     <script src="scripts/angular.min.js"></script>
     <script src="scripts/angular-route.min.js"></script>
     <script src="scripts/jquery.min.js"></script>
@@ -30,9 +36,7 @@
             appId  : 'YOUR_APP_ID',
             channelUrl : 'http://YOUR_DOMAIN/channel.html',
             player: {
-                container: 'dz-player',
-                width : 800,
-                height : 300
+                    onload: function() {}
             }
         });
     </script>
@@ -43,49 +47,62 @@
 
         app.config(function($routeProvider){
             $routeProvider
-                    .when('/home', {templateUrl: 'home.html'})
-                    .when('/catalogue', {templateUrl: 'catalogue.html'})
-                    .otherwise({redirectTo:'/home'});
+                    .when('/home', {templateUrl: 'home_v2.html'})
+                    .when('/catalogue', {templateUrl: 'catalogue.html'});
         });
 
         app.controller('MusicPlayerController', MusicPlayerController);
 
         <!--Contrôle des ajouts des chansons, de la mise à jour de playlist-->
-        function MusicPlayerController($scope){
-            this.loading = true;
+
+        function MusicPlayerController($scope, $location){
+
             //this.musicPlayer = new MusicPlayerLocalClient();
             this.musicPlayer = new MusicPlayerRestClient();
-            this.currentTrack   = null;
-            this.proposedTracks = this.musicPlayer.getProposedTracks();
-            this.proposedTracksName = null;
-            this.previousTracks = null;
-            this.albums = this.musicPlayer.getAlbums();
-            this.tracks = this.musicPlayer.getTracks();
-            this.catalogueTracks = this.musicPlayer.getTracks();
+            $scope.proposedTracks = this.musicPlayer.getProposedTracks();
+            $scope.currentTrack   = $scope.proposedTracks[0];
+            $scope.proposedTracksName = [];
+            $scope.previousTracks = this.musicPlayer.getPreviousTracks();
+            $scope.albums = this.musicPlayer.getAlbums();
+            $scope.tracks = this.musicPlayer.getTracks();
+            $scope.catalogueTracks = this.musicPlayer.getTracks();
 
-            this.currentTrackName  = null;
-            this.currentTrackArtist = null;
+            $scope.currentTrackName  = null;
+            $scope.currentTrackArtist = null;
+
+
+            $scope.isActive = function(route) {
+                return route === $location.path();
+            };
 
             <!--récupérer les infos d'une chanson depuis Deezer -->
-            this.getTrackInfo = function () {
-                var that = this;
-                DZ.api('/track/' + this.currentTrack, function (track) {
-                    that.currentTrackName  = track.title;
-                    that.currentTrackArtist = track.artist.name;
-                    that.currentTrackThumbailURL = track.album.cover;
+            $scope.getTrackInfo = function () {
+                DZ.api('/track/' + $scope.currentTrack, function (track) {
+                    $scope.currentTrackName  = track.title;
+                    $scope.currentTrackArtist = track.artist.name;
+                    $scope.currentTrackThumbailURL = track.album.cover;
 
                     // Explanation: https://docs.angularjs.org/guide/scope
                     $scope.$apply();
                 });
             };
+            $scope.getTrackInfo();
+
+            // A Modifier Ne fonctionne pas
+            $scope.getTrackName = function (id) {
+                var res;
+                DZ.api('/track/' + id, function (track) {
+                     res = track.title;
+                });
+                return res;
+            };
+
             <!--récupérer les infos des chansons choisies dans le catalogue -->
             this.getAllTracksInfo = function () {
-                var that = this;
-                that.proposedTracksName = [];
-                for (var i = 0; i < that.proposedTracks.length; i++) {
-                    DZ.api('/track/' + this.proposedTracks[i], function (track) {
-                        that.proposedTracksName.push(track.title);
-                        $scope.$apply();
+
+                for (var i = 0; i < $scope.proposedTracks.length; i++) {
+                    DZ.api('/track/' + $scope.proposedTracks[i], function (track) {
+                        $scope.proposedTracksName.push(track.title);
                     });
                 }
             };
@@ -93,13 +110,13 @@
             this.filterTracks = function (albumID){
                 var res = [];
                 var id = 0;
-                for(var i=0;i<this.albums.length;i++){
-                    if(this.albums[i].id == albumID) {
+                for(var i=0;i<$scope.albums.length;i++){
+                    if($scope.albums[i].id == albumID) {
                         id = i;
                         break;
                     }
                 }
-                angular.forEach(this.tracks, function(track, j){
+                angular.forEach($scope.tracks, function(track, j){
                     if(track.albumID == id)
                         res.push(track);
                 });
@@ -110,7 +127,23 @@
                 var nextTrack = this.musicPlayer.getNextTrack();
                 DZ.player.playTracks( [nextTrack] );
                 this.updatePlaylist();
+                $scope.$apply();
             };
+
+            this.playCurrentTrack = function() {
+                var track = this.musicPlayer.getNextTrack();
+                this.updatePlaylist();
+                DZ.player.playTracks( [track] );
+                $scope.$apply();
+            };
+
+
+            DZ.Event.subscribe('player_loaded', function(){
+                $scope.getTrackInfo();
+//                DZ.player.playTracks( [$scope.currentTrack] );
+            });
+
+
             <!--ajouter les chansons d'un album dans musicPlayer-->
             this.addAlbumsTracks = function() {
                     this.musicPlayer.putAlbumTracks($("#albumID").val());
@@ -121,17 +154,11 @@
                 this.currentTrack   = this.musicPlayer.getCurrentTrack();
                 this.proposedTracks = this.musicPlayer.getProposedTracks();
                 this.previousTracks = this.musicPlayer.getPreviousTracks();
-
-                this.getTrackInfo();
             };
 
             <!-- ??? -->
             this.getAllTracksInfo();
 
-            this.activeNavItem = function(e){
-                $(".navbar-nav>li.active").removeClass("active active-plus");
-                $(e.target.parentNode).addClass("active active-plus");
-            }
         } // class
     </script>
     <script>
@@ -177,17 +204,18 @@
             this.getTracks = function () {
                 var tracks = this.doRequest('GET', GET_TRACKS, null);
                 return tracks;
-            }
+            };
 
             this.putAlbumTracks = function(albumID){
                 var url = PUT_ALBUMS_TRACKS.replace('{_}',albumID);
                 this.doRequest('PUT', url, null);
-            }
+            };
 
             this.putProposedTrack = function(trackID) {
                 var url = PUT_PROPOSED_TRACK.replace('{_}',trackID);
                 this.doRequest('PUT', url, null);
-            }
+            };
+
             <!-- requêtes des utilisateurs : get, put, post(, delete)-->
             this.doRequest = function(verb, url, data) {
 

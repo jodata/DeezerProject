@@ -16,7 +16,7 @@
    version="1.1"
    inkscape:version="0.91 r13725"
    sodipodi:docname="logo.svg"
-   inkscape:export-filename="C:\Users\Rémy\WebstormProjects\DeezerProject\MusicPlayer.UI\img\logo.png"
+   inkscape:export-filename="C:\Users\Rémy\WebstormProjects\DeezerProject\MusicPlayer.UI\img\logo_light.png"
    inkscape:export-xdpi="176.84"
    inkscape:export-ydpi="176.84">
   <defs
@@ -28,11 +28,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.49497475"
-     inkscape:cx="632.82368"
-     inkscape:cy="399.7569"
+     inkscape:zoom="0.9899495"
+     inkscape:cx="356.30602"
+     inkscape:cy="460.45053"
      inkscape:document-units="px"
-     inkscape:current-layer="layer6"
+     inkscape:current-layer="layer1"
      showgrid="false"
      showguides="true"
      inkscape:guide-bbox="true"
@@ -41,8 +41,8 @@
      inkscape:snap-to-guides="true"
      inkscape:snap-midpoints="true"
      inkscape:snap-global="true"
-     inkscape:window-width="1366"
-     inkscape:window-height="705"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
@@ -95,7 +95,8 @@
      inkscape:groupmode="layer"
      id="layer4"
      inkscape:label="hare"
-     transform="translate(-115.55096,-102.36221)">
+     transform="translate(-115.55096,-102.36221)"
+     style="display:inline">
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ff8300;fill-opacity:1;stroke:#ff8300;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -113,7 +114,8 @@
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="S2"
-     transform="translate(-115.55096,-102.36221)">
+     transform="translate(-115.55096,-102.36221)"
+     style="display:inline">
     <g
        id="g4250"
        style="fill:#ff8300;fill-opacity:1;stroke:none"
@@ -136,7 +138,8 @@
      inkscape:groupmode="layer"
      id="layer6"
      inkscape:label="the"
-     transform="translate(-115.55096,-102.36221)">
+     transform="translate(-115.55096,-102.36221)"
+     style="display:inline">
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:121.09322357px;line-height:66.00000262%;font-family:sans-serif;letter-spacing:-4.19624281px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:6.8457613;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -155,7 +158,8 @@
      inkscape:groupmode="layer"
      id="layer5"
      inkscape:label="sound"
-     transform="translate(-115.55096,-102.36221)">
+     transform="translate(-115.55096,-102.36221)"
+     style="display:inline">
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ff4b00;fill-opacity:1;stroke:#ff4b00;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -198,26 +202,33 @@
        id="path4144"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc"
-       inkscape:export-xdpi="237.17648"
-       inkscape:export-ydpi="237.17648" />
+       inkscape:export-xdpi="161.3"
+       inkscape:export-ydpi="161.3" />
     <path
        style="fill:#ff8300;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 304.92394,422.3622 c 0,-23.79194 52.52793,-23.79194 52.52793,0 l 0,335.71429 c 0,27.14286 -52.52793,27.14286 -52.52793,0 z"
        id="path4156"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc"
-       inkscape:export-xdpi="237.17648"
-       inkscape:export-ydpi="237.17648" />
+       inkscape:export-xdpi="161.3"
+       inkscape:export-ydpi="161.3" />
     <path
        style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 210,412.36219 c 4.05693,-9.86758 70.28389,-39.09796 116.14829,-40 C 331.4302,259.48466 375.0489,214.21329 546,212.94408 l 1.28572,-65.48944 C 317.71119,146.08899 210,238.48248 210,412.36219 Z"
+       d="m 210,412.36219 c 4.05693,-9.86758 70.28389,-39.09796 116.14829,-40 5.28191,-112.87753 50.18633,-158.1489 221.13743,-159.41811 l 0,-65.48944 C 317.71119,146.08899 210,238.48248 210,412.36219 Z"
        id="path4166"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc"
-       inkscape:export-xdpi="237.17648"
-       inkscape:export-ydpi="237.17648" />
+       inkscape:export-xdpi="161.3"
+       inkscape:export-ydpi="161.3" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer7"
+     inkscape:label="barre qui fait chier"
+     style="display:inline">
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5.34073877;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       transform="translate(-115.55096,-102.36221)"
+       style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5.34073877;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 547.14286,102.36221 0,728.57143 z"
        id="path4168"
        inkscape:connector-curvature="0"

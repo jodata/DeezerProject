@@ -8,7 +8,7 @@
         <!--display des tracks sous forme d'un tableau avec accordion-bootstrap-->
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
             <div class="panel panel-default accordeon-item clearfix"
-                 ng-repeat="(fIndex, album) in musicPlayer.albums | filter:query">
+                 ng-repeat="(fIndex, album) in albums | filter:query">
                 <div class="panel-heading" role="tab" id={{"heading"+$index}}>
                     <h4 class="panel-title">
                         <a class="collapsed"
