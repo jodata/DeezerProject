@@ -33,10 +33,10 @@
                      aria-labelledby={{"heading"+$index}}>
                     <div class="panel-body">
                         <table class="table table-striped">
-                            <tr ng-repeat="track in musicPlayer.filterTracks(album.id)">
+                            <tr ng-repeat="track in filterTracks(album.id)">
                                 <td>{{$index+1}}</td>
                                 <td>{{track.title}}</td>
-                                <td ng-if="musicPlayer.inPlaylist()" ng-click="musicPlayer.addToPlaylist(track.deezerID)">
+                                <td ng-if="inPlaylist()" ng-click="addToPlaylist(track.deezerID)">
                                     <span class="glyphicon glyphicon-plus add-to-playlist"></span>
                                 </td>
                             </tr>

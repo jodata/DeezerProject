@@ -5,23 +5,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="styles/bootstrap.min.css" rel="stylesheet">
+    <!--style css pour l'interface-->
     <link href="styles/interface.css" rel="stylesheet">
 </head>
 
 <body ng-app="MusicPlayerApp">
-    <!-- ??? -->
+
     <div id="dz-root" class="row"></div>
+
 
     <div ng-controller="MusicPlayerController as musicPlayer">
         <!--barre des onglets en haut-->
         <div ng-include="'includes/nav.html'"></div>
-        <!--directive pour le module ng-route : home.html et catalogue.html-->
         <div ng-view></div>
         <!--footer-->
         <div ng-include="'includes/footer.html'"></div>
+        <!--javascript -->
     </div>
-
-    <!--javascript -->
     <script src="scripts/angular.min.js"></script>
     <script src="scripts/angular-route.min.js"></script>
     <script src="scripts/jquery.min.js"></script>
@@ -30,8 +30,7 @@
     <script src="scripts/animation.js"></script>
     <!-- MVC -->
     <script src="http://cdn-files.deezer.com/js/min/dz.js"></script>
-
-    <!--se connecter à DeezerPlayer -->
+    <!--Deezer player -->
     <script>
         DZ.init({
             appId  : 'YOUR_APP_ID',
@@ -54,15 +53,21 @@
 
         app.controller('MusicPlayerController', MusicPlayerController);
 
+        <!--Contrôle des ajouts des chansons, de la mise à jour de playlist-->
+
         function MusicPlayerController($scope, $location){
 
             //this.musicPlayer = new MusicPlayerLocalClient();
-            this.musicPlayer = new MusicPlayerRestClient();
-            $scope.proposedTracks = this.musicPlayer.getProposedTracks();
+            //this.musicPlayer = new MusicPlayerRestClient();
+            $scope.musicPlayer = new MusicPlayerRestClient();
+            $scope.proposedTracks = $scope.musicPlayer.getProposedTracks();
             $scope.currentTrack   = $scope.proposedTracks[0];
-            $scope.previousTracks = this.musicPlayer.getPreviousTracks();
-            $scope.albums = this.musicPlayer.getAlbums();
-            $scope.tracks = this.musicPlayer.getTracks();
+            $scope.previousTracks = $scope.musicPlayer.getPreviousTracks();
+            $scope.albums = $scope.musicPlayer.getAlbums();
+            $scope.tracks = $scope.musicPlayer.getTracks();
+            $scope.ismute = false;
+            $scope.offset = null;
+
             $scope.currentTrackName  = null;
             $scope.currentTrackArtist = null;
 
@@ -93,16 +98,17 @@
                 return res;
             };
 
-            <!--récupérer les chansons choisies dans le catalogue -->
-            this.getAllTracksInfo = function () {
+            <!--récupérer les infos des chansons choisies dans le catalogue -->
+            $scope.getAllTracksInfo = function () {
+
                 for (var i = 0; i < $scope.proposedTracks.length; i++) {
                     DZ.api('/track/' + $scope.proposedTracks[i], function (track) {
-                        $scope.proposedTracksName.push(track.title);
+                        //$scope.proposedTracksName.push(track.title);
                     });
                 }
             };
 
-            this.filterTracks = function (albumID){
+            $scope.filterTracks = function (albumID){
                 var res = [];
                 var id = 0;
                 for(var i=0;i<$scope.albums.length;i++){
@@ -118,51 +124,112 @@
                 return res;
             };
 
-            <!--passer à la chanson suivante et mettre à jour la playlist -->
-            this.playNextTrack = function() {
-                var nextTrack = this.musicPlayer.getNextTrack();
-                DZ.player.playTracks( [nextTrack] );
-                this.updatePlaylist();
+
+            <!--ajouter les chansons d'un album dans musicPlayer-->
+            $scope.addAlbumsTracks = function() {
+                $scope.musicPlayer.putAlbumTracks($("#albumID").val());
+            };
+            <!--mettre à jour la playlist -->
+            $scope.updatePlaylist = function () {
+
+                $scope.currentTrack   = $scope.musicPlayer.getCurrentTrack();
+                $scope.proposedTracks = $scope.musicPlayer.getProposedTracks();
+                $scope.previousTracks = $scope.musicPlayer.getPreviousTracks();
                 $scope.$apply();
             };
 
-            <!--activer la chanson courante de la radio-->
-            this.playCurrentTrack = function() {
-                var track = this.musicPlayer.getNextTrack();
-                this.updatePlaylist();
+            <!-- ??? -->
+            $scope.getAllTracksInfo();
+            <!-- ??? -->
+
+            $scope.inPlaylist = function(){
+                return true;
+            }
+
+
+            ///////////////////////////////////
+            // FONCTION DE PLAYER DEEZER //////
+            ///////////////////////////////////
+
+            // Joue les tracks de la playlist du serveur
+            $scope.playTracks = function() {
+                $scope.proposedTracks = $scope.musicPlayer.getProposedTracks();
+                console.log($scope.proposedTracks);
+                DZ.player.playTracks( [$scope.proposedTracks], 0, 280 );
+                $scope.$apply();
+            };
+
+            // Joue la current track du server
+            $scope.playCurrentTrack = function() {
+                var track = $scope.musicPlayer.getCurrentTrack();
                 DZ.player.playTracks( [track] );
-                $scope.$apply();
+                // On peut ajouter un un index et un offset pour commencer à une certaine chanson et à un certain moment
+                // DZ.player.playTracks( [track], index, offset);
             };
 
-            <!--???-->
+            $scope.playNextTrack = function() {
+                var track = $scope.musicPlayer.getNextTrack();
+                DZ.player.playTracks( [track] );
+                // On peut ajouter un un index et un offset pour commencer à une certaine chanson et à un certain moment
+                // DZ.player.playTracks( [track], index, offset);
+            };
+
+
+            $scope.mute = function() {
+                if($scope.ismute)
+                {
+                    DZ.player.setVolume(100);
+                    $scope.ismute = false;
+                }
+
+                else{
+                    DZ.player.setVolume(0);
+                    $scope.ismute = true;
+                }
+            };
+
+            $scope.next = function() {
+                DZ.player.next();
+            };
+
+            $scope.changePosition = function(pos) {
+                DZ.player.seek(pos);
+            };
+
+            ///////////////////////////////////
+            // EVENEMENTS DU PLAYER DEEZER //////
+            ///////////////////////////////////
+
+            //Indique la position du player
+            DZ.Event.subscribe('player_position', function(e){
+                console.log("Player position",  e);
+            });
+
+            //Indique des information sur une track qui démarre
+            DZ.Event.subscribe('current_track', function(track){
+                console.log("infoTrack",  track);
+            });
+
+
+            DZ.Event.subscribe('track_end', function(end){
+                if(end){
+                    $scope.playNextTrack();
+                }
+            });
+
             DZ.Event.subscribe('player_loaded', function(){
                 $scope.getTrackInfo();
 //                DZ.player.playTracks( [$scope.currentTrack] );
             });
 
-            <!--ajouter les chansons d'un album dans musicPlayer-->
-            this.addAlbumsTracks = function() {
-                    this.musicPlayer.putAlbumTracks($("#albumID").val());
-            };
 
-            <!--mettre à jour la playlist -->
-            this.updatePlaylist = function () {
-                this.currentTrack   = this.musicPlayer.getCurrentTrack();
-                this.proposedTracks = this.musicPlayer.getProposedTracks();
-                this.previousTracks = this.musicPlayer.getPreviousTracks();
-            };
-
-            <!-- ??? -->
-            this.getAllTracksInfo();
-            <!--  -->
-            this.inPlaylist = function(){
-                return true;
-            }
         } // class
     </script>
-
-    <!--client qui interagit avec le serveur-->
+    
     <script>
+        /***************************************
+         * client qui interagit avec le serveur *
+         ****************************************/
         function MusicPlayerRestClient(){
 
             var CURRENT_TRACK_URI   = 'http://localhost:3000/playlist/currentTrack';
@@ -224,6 +291,7 @@
 
             <!-- requêtes des utilisateurs : get, put, post(, delete)-->
             this.doRequest = function(verb, url, data) {
+
                 var response;
 
                 $.ajax({
@@ -240,6 +308,7 @@
                 });
 
                 return response;
+
             }; // method
 
         } // class
