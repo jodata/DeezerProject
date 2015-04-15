@@ -19,9 +19,9 @@
                             <img src={{album.cover}} class="accordeon-img img-rounded">
 
                             <div class="accordeon-title">
-                                <span>{{album.title|limitTo:12}}{{album.title.length > 12 ? '...' : ''}}</span>
+                                <span>{{album.title|limitTo:25}}{{album.title.length > 25 ? '...' : ''}}</span>
                                 <div>
-                                    <strong>{{album.artist|limitTo:12}}{{album.artist.length > 12 ? '...' :''}}</strong>
+                                    <strong>{{album.artist|limitTo:25}}{{album.artist.length > 25 ? '...' :''}}</strong>
                                 </div>
                             </div>
                         </a>
@@ -34,6 +34,9 @@
                             <tr ng-repeat="track in musicPlayer.filterTracks(album.id)">
                                 <td>{{$index+1}}</td>
                                 <td>{{track.title}}</td>
+                                <td ng-if="musicPlayer.inPlaylist()" ng-click="musicPlayer.addToPlaylist(track.deezerID)">
+                                    <span class="glyphicon glyphicon-plus add-to-playlist"></span>
+                                </td>
                             </tr>
                         </table>
                     </div>

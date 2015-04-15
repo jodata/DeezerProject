@@ -1,29 +1,40 @@
 <style>
+    @font-face {
+        font-family: "Top Secret";
+        src: url(fonts/Top%20Secret.ttf);
+    }
     @import url(http://fonts.googleapis.com/css?family=Roboto:100);
     html, body, .ng-scope, .playlist-track{
         background-color: #ddd;
+    }
+    #tab_content h3 {
+        border-bottom: solid 1px darkorange;
     }
     .track {
         font-family: 'Roboto', sans-serif;
         font-size: large;
     }
     .white-gradient {
-        background: -moz-linear-gradient(left,  rgba(255,255,255,1) 0%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,0) 100%); /* FF3.6+ */
-        background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,1)), color-stop(50%,rgba(255,255,255,0.9)), color-stop(100%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
-        background: -webkit-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.9) 50%,rgba(255,255,255,0) 100%); /* Chrome10+,Safari5.1+ */
-        background: -o-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.9) 50%,rgba(255,255,255,0) 100%); /* Opera 11.10+ */
-        background: -ms-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.9) 50%,rgba(255,255,255,0) 100%); /* IE10+ */
-        background: linear-gradient(to right,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.9) 50%,rgba(255,255,255,0) 100%); /* W3C */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=1 ); /* IE6-9 */
+        padding-right: 10px;
+        background-color: #fff;
+        /*background: -moz-linear-gradient(left,  rgba(255,255,255,1) 0%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,0) 100%); /!* FF3.6+ *!/*/
+        /*background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,1)), color-stop(50%,rgba(255,255,255,0.9)), color-stop(100%,rgba(255,255,255,0))); /!* Chrome,Safari4+ *!/*/
+        /*background: -webkit-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.9) 50%,rgba(255,255,255,0) 100%); /!* Chrome10+,Safari5.1+ *!/*/
+        /*background: -o-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.9) 50%,rgba(255,255,255,0) 100%); /!* Opera 11.10+ *!/*/
+        /*background: -ms-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.9) 50%,rgba(255,255,255,0) 100%); /!* IE10+ *!/*/
+        /*background: linear-gradient(to right,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.9) 50%,rgba(255,255,255,0) 100%); /!* W3C *!/*/
+        /*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=1 ); /!* IE6-9 *!/*/
     }
     .orange-gradient{
-        background: -moz-linear-gradient(left,  rgba(249,138,69,1) 0%, rgba(249,138,69,0.9) 50%, rgba(255,255,255,0) 100%); /* FF3.6+ */
-        background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(249,138,69,1)), color-stop(50%,rgba(249,138,69,0.9)), color-stop(100%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
-        background: -webkit-linear-gradient(left,  rgba(249,138,69,1) 0%,rgba(249,138,69,0.9) 50%,rgba(255,255,255,0) 100%); /* Chrome10+,Safari5.1+ */
-        background: -o-linear-gradient(left,  rgba(249,138,69,1) 0%,rgba(249,138,69,0.9) 50%,rgba(255,255,255,0) 100%); /* Opera 11.10+ */
-        background: -ms-linear-gradient(left,  rgba(249,138,69,1) 0%,rgba(249,138,69,0.9) 50%,rgba(255,255,255,0) 100%); /* IE10+ */
-        background: linear-gradient(to right,  rgba(249,138,69,1) 0%,rgba(249,138,69,0.9) 50%,rgba(255,255,255,0) 100%); /* W3C */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f98a45', endColorstr='#00ffffff',GradientType=1 ); /* IE6-9 */
+        padding-right: 10px;
+        background-color: rgba(249,138,69,1);
+        /*background: -moz-linear-gradient(left,  rgba(249,138,69,1) 0%, rgba(249,138,69,0.9) 50%, rgba(255,255,255,0) 100%); /!* FF3.6+ *!/*/
+        /*background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(249,138,69,1)), color-stop(50%,rgba(249,138,69,0.9)), color-stop(100%,rgba(255,255,255,0))); /!* Chrome,Safari4+ *!/*/
+        /*background: -webkit-linear-gradient(left,  rgba(249,138,69,1) 0%,rgba(249,138,69,0.9) 50%,rgba(255,255,255,0) 100%); /!* Chrome10+,Safari5.1+ *!/*/
+        /*background: -o-linear-gradient(left,  rgba(249,138,69,1) 0%,rgba(249,138,69,0.9) 50%,rgba(255,255,255,0) 100%); /!* Opera 11.10+ *!/*/
+        /*background: -ms-linear-gradient(left,  rgba(249,138,69,1) 0%,rgba(249,138,69,0.9) 50%,rgba(255,255,255,0) 100%); /!* IE10+ *!/*/
+        /*background: linear-gradient(to right,  rgba(249,138,69,1) 0%,rgba(249,138,69,0.9) 50%,rgba(255,255,255,0) 100%); /!* W3C *!/*/
+        /*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f98a45', endColorstr='#00ffffff',GradientType=1 ); /!* IE6-9 *!/*/
     }
     /**
     * Les musiques qui viennent d'être jouées
@@ -49,6 +60,8 @@
         height: 70px;
         text-align: right;
         display: inline-block;
+        -webkit-border-radius: 0 10px 10px 0;
+        border-radius: 0 10px 10px 0;
     }
 
     .track-artist, .track-title {
@@ -68,8 +81,17 @@
     * Current : La music qui est en train d'être jouée
     **/
     #current-track{
-        margin-top: 50px;
+        margin-top: 20px;
+        margin-bottom: 20px;
         height: 206px;
+    }
+    #on-air{
+        vertical-align: bottom;
+        position: relative;
+        text-align: center;
+        font-family: 'Top Secret';
+        color: darkred;
+        display: inline-block;
     }
     #current-logo {
         margin-left: 10%;
@@ -91,6 +113,8 @@
         display: inline-block;
         font-size: xx-large;
         padding-left: 10px;
+        -webkit-border-radius: 0 10px 10px 0;
+        border-radius: 0 10px 10px 0;
     }
     #current-text{
         text-align: left;
@@ -98,25 +122,28 @@
     }
     #current-title{
         color: #ffe7d4;
+        display: inline-block;
     }
     #current-plus{
-        text-align: right;
+        text-align: center;
         width: 100%;
         height: 50%;
     }
     #current-play, #current-mute{
-        height: 50px;
-        width: 50px;
+        height: 53px;
+        width: 53px;
         vertical-align: top;
         margin-right: 10px;
         margin-top: 26px;
-        border: solid 2px #ffe7d4;
+        border: solid 3px #ffe7d4;
         color: #ffe7d4;
         -webkit-border-radius: 25px;
-        -moz-border-radius: 25px;
         border-radius: 25px;
-        align-content: center;
-        padding: 5px;
+        padding: 8px 0 0 0;
+    }
+    #current-mute{
+        padding-top: 9px;
+        padding-left: 3px;
     }
     #current-play:hover, #current-mute:hover{
         color:#333;
@@ -124,22 +151,35 @@
         background-color: rgba(255,255,255,0.6);
         cursor: pointer;
     }
-    #current-mute{
-        padding-top: 7px;
-    }
     /**
     * After track : La chanson qui va etre jouee juste après la current
     **/
     .after-track{
         display: inline-block;
         width: 60%;
-        margin-right: 60px;
+        /*margin-right: 60px;*/
         margin-top: 16px;
     }
     .after-img{
         /*width: 70px;*/
-        border-left: solid 3px #FFF;
+        /*border-left: solid 3px #FFF;*/
         height: 70px;
+    }
+    #after-label{
+        height: 70px;
+        width: 20px;
+        vertical-align: top;
+        display: inline-block;
+        background-color: #000;
+        color: #FFF;
+    }
+    #after-label div{
+        margin-top: 28px;
+        -webkit-transform: rotate(-90deg);
+        transform: rotate(-90deg);
+    }
+    .after-content{
+        width: 74%;
     }
     /**
     * Playlist : Mise en forme de la playlist dynamique
@@ -147,7 +187,6 @@
     .playlist-container{
         width: 80%;
         margin-left: 10%;
-        margin-top: 20px;
     }
     .playlist-track{
         margin-bottom: 10px;
@@ -171,6 +210,8 @@
         width: 336px;
         display: inline-block;
         text-align: right;
+        -webkit-border-radius: 0 5px 5px 0;
+        border-radius: 0 5px 5px 0;
     }
     .playlist-order{
         height: 70px;
@@ -183,7 +224,6 @@
         text-align: center;
         padding-top: 20px;
         -webkit-border-radius: 5px 0 0 5px;
-        -moz-border-radius: 5px 0 0 5px;
         border-radius: 5px 0 0 5px;
         -webkit-transition: background 500ms;
         transition: background 500ms;
@@ -196,7 +236,6 @@
     }
     .playlist-vote{
         -webkit-border-radius: 15px;
-        -moz-border-radius: 15px;
         border-radius: 15px;
         border: solid 2px #333;
         color: #333;
@@ -264,6 +303,7 @@
         --><div id="current-content" class="orange-gradient">
                 <div id="current-text">
                     <div id="current-title" class="track-title">Salut jean mi</div>
+                    <div id="on-air">{ON AIR}</div>
                     <div id="current-artist" class="track-artist">Sébastien Patoche</div>
                 </div>
                 <div id="current-plus">
@@ -271,6 +311,7 @@
                     <a><span id="current-mute" class="glyphicon glyphicon-volume-off"></span></a>
                     <div class="track after-track">
                         <img class="after-img" src="img/test.jpg" alt="Au bout... - JJ Goldman"/><!--
+                        --><div id="after-label"><div>next</div></div><!--
                         --><div class="after-content white-gradient">
                                 <div class="track-title">Au bout de mes rêves</div>
                                 <div class="track-artist">JJ Goldman</div>
@@ -280,6 +321,7 @@
         </div>
     </div>
     <div class="playlist-container">
+        <h3 id="playlist-label" class="col-md-12">Playlist</h3>
         <div class="track playlist-track col-md-6">
             <div class="playlist-order">1</div><!--
             --><img class="playlist-img" src="img/test_1.jpg" alt="JJ Gold"/><!--
