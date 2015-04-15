@@ -9,18 +9,19 @@
 </head>
 
 <body ng-app="MusicPlayerApp">
-
+    <!-- ??? -->
     <div id="dz-root" class="row"></div>
-
 
     <div ng-controller="MusicPlayerController as musicPlayer">
         <!--barre des onglets en haut-->
         <div ng-include="'includes/nav.html'"></div>
+        <!--directive pour le module ng-route : home.html et catalogue.html-->
         <div ng-view></div>
         <!--footer-->
         <div ng-include="'includes/footer.html'"></div>
-        <!--javascript -->
     </div>
+
+    <!--javascript -->
     <script src="scripts/angular.min.js"></script>
     <script src="scripts/angular-route.min.js"></script>
     <script src="scripts/jquery.min.js"></script>
@@ -29,7 +30,8 @@
     <script src="scripts/animation.js"></script>
     <!-- MVC -->
     <script src="http://cdn-files.deezer.com/js/min/dz.js"></script>
-    <!--Deezer player -->
+
+    <!--se connecter à DeezerPlayer -->
     <script>
         DZ.init({
             appId  : 'YOUR_APP_ID',
@@ -52,8 +54,6 @@
 
         app.controller('MusicPlayerController', MusicPlayerController);
 
-        <!--Contrôle des ajouts des chansons, de la mise à jour de playlist-->
-
         function MusicPlayerController($scope, $location){
 
             //this.musicPlayer = new MusicPlayerLocalClient();
@@ -63,11 +63,10 @@
             $scope.previousTracks = this.musicPlayer.getPreviousTracks();
             $scope.albums = this.musicPlayer.getAlbums();
             $scope.tracks = this.musicPlayer.getTracks();
-
             $scope.currentTrackName  = null;
             $scope.currentTrackArtist = null;
 
-
+            <!--activer/afficher la page correspondante selon la location de l'utilisateur-->
             $scope.isActive = function(route) {
                 return route === $location.path();
             };
@@ -94,9 +93,8 @@
                 return res;
             };
 
-            <!--récupérer les infos des chansons choisies dans le catalogue -->
+            <!--récupérer les chansons choisies dans le catalogue -->
             this.getAllTracksInfo = function () {
-
                 for (var i = 0; i < $scope.proposedTracks.length; i++) {
                     DZ.api('/track/' + $scope.proposedTracks[i], function (track) {
                         $scope.proposedTracksName.push(track.title);
@@ -119,6 +117,7 @@
                 });
                 return res;
             };
+
             <!--passer à la chanson suivante et mettre à jour la playlist -->
             this.playNextTrack = function() {
                 var nextTrack = this.musicPlayer.getNextTrack();
@@ -127,6 +126,7 @@
                 $scope.$apply();
             };
 
+            <!--activer la chanson courante de la radio-->
             this.playCurrentTrack = function() {
                 var track = this.musicPlayer.getNextTrack();
                 this.updatePlaylist();
@@ -134,20 +134,19 @@
                 $scope.$apply();
             };
 
-
+            <!--???-->
             DZ.Event.subscribe('player_loaded', function(){
                 $scope.getTrackInfo();
 //                DZ.player.playTracks( [$scope.currentTrack] );
             });
 
-
             <!--ajouter les chansons d'un album dans musicPlayer-->
             this.addAlbumsTracks = function() {
                     this.musicPlayer.putAlbumTracks($("#albumID").val());
             };
+
             <!--mettre à jour la playlist -->
             this.updatePlaylist = function () {
-
                 this.currentTrack   = this.musicPlayer.getCurrentTrack();
                 this.proposedTracks = this.musicPlayer.getProposedTracks();
                 this.previousTracks = this.musicPlayer.getPreviousTracks();
@@ -155,15 +154,15 @@
 
             <!-- ??? -->
             this.getAllTracksInfo();
+            <!--  -->
             this.inPlaylist = function(){
                 return true;
             }
         } // class
     </script>
+
+    <!--client qui interagit avec le serveur-->
     <script>
-        /***************************************
-         * client qui interagit avec le serveur *
-         ****************************************/
         function MusicPlayerRestClient(){
 
             var CURRENT_TRACK_URI   = 'http://localhost:3000/playlist/currentTrack';
@@ -175,41 +174,49 @@
             var PUT_ALBUMS_TRACKS   = 'http://localhost:3000/tracks/album/{_}';
             var PUT_PROPOSED_TRACK  = 'http://localhost:3000/playlist/{_}';
 
+            <!--récupérer la chanson courante-->
             this.getCurrentTrack = function(){
                 var currentTrack = this.doRequest('GET', CURRENT_TRACK_URI, null);
                 return currentTrack;
             };
 
+            <!--récupérer les chansons choisies dans le catalogue-->
             this.getProposedTracks = function (){
                 var proposedTracks = this.doRequest('GET', PROPOSED_TRACKS_URI, null);
                 return proposedTracks;
             };
 
+            <!--récupérer les chansons suivantes-->
             this.getPreviousTracks = function(){
                 var previousTracks = this.doRequest('GET', PREVIOUS_TRACKS_URI, null);
                 return previousTracks;
             };
 
+            <!--récupérer la chanson suivante-->
             this.getNextTrack = function(){
                 var nextTrack = this.doRequest('POST', NEXT_TRACK_URI, null);
                 return nextTrack;
             };
 
+            <!--récupérer les albums-->
             this.getAlbums = function(){
                 var albums = this.doRequest('GET', GET_ALBUMS, null);
                 return albums;
             };
 
+            <!--récupérer les chansons-->
             this.getTracks = function () {
                 var tracks = this.doRequest('GET', GET_TRACKS, null);
                 return tracks;
             };
 
+            <!--ajouter les chansons d'un album-->
             this.putAlbumTracks = function(albumID){
                 var url = PUT_ALBUMS_TRACKS.replace('{_}',albumID);
                 this.doRequest('PUT', url, null);
             };
 
+            <!--ajouter une chanson dans la playlist-->
             this.putProposedTrack = function(trackID) {
                 var url = PUT_PROPOSED_TRACK.replace('{_}',trackID);
                 this.doRequest('PUT', url, null);
@@ -217,7 +224,6 @@
 
             <!-- requêtes des utilisateurs : get, put, post(, delete)-->
             this.doRequest = function(verb, url, data) {
-
                 var response;
 
                 $.ajax({
@@ -234,7 +240,6 @@
                 });
 
                 return response;
-
             }; // method
 
         } // class
