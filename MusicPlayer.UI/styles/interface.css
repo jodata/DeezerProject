@@ -12,7 +12,6 @@ a {
     text-decoration: none;
     color: inherit;
 }
-
 /*footer*/
 .footer{
     text-align: center;
@@ -50,7 +49,23 @@ a {
     -moz-column-count: 3; /* Firefox */
     column-count: 3;
 }
-
+.add-to-playlist{
+    border : solid 3px rgba(255,140,0,1);
+    color: rgba(255,140,0,1);
+    height: 24px;
+    width: 24px;
+    padding-left: 3px;
+    padding-top: 2px;
+    -webkit-border-radius: 22px;
+    -moz-border-radius: 22px;
+    border-radius: 22px;
+    cursor: pointer;
+}
+.add-to-playlist:hover{
+    border-color: #333;
+    color:#333;
+    background-color: rgba(255,255,255,0.7);
+}
 @media only screen and (max-width:760px) {
     #accordion {
         -webkit-column-count: 1; /* Chrome, Safari, Opera */

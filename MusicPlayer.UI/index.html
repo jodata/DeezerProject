@@ -5,7 +5,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="styles/bootstrap.min.css" rel="stylesheet">
-    <!--style css pour l'interface-->
     <link href="styles/interface.css" rel="stylesheet">
 </head>
 
@@ -61,11 +60,9 @@
             this.musicPlayer = new MusicPlayerRestClient();
             $scope.proposedTracks = this.musicPlayer.getProposedTracks();
             $scope.currentTrack   = $scope.proposedTracks[0];
-            $scope.proposedTracksName = [];
             $scope.previousTracks = this.musicPlayer.getPreviousTracks();
             $scope.albums = this.musicPlayer.getAlbums();
             $scope.tracks = this.musicPlayer.getTracks();
-            $scope.catalogueTracks = this.musicPlayer.getTracks();
 
             $scope.currentTrackName  = null;
             $scope.currentTrackArtist = null;
@@ -158,7 +155,9 @@
 
             <!-- ??? -->
             this.getAllTracksInfo();
-
+            this.inPlaylist = function(){
+                return true;
+            }
         } // class
     </script>
     <script>
