@@ -90,9 +90,9 @@
             $scope.getTrackInfo();
 
             // A Modifier Ne fonctionne pas
-            $scope.getTrackName = function (id) {
+            $scope.getTrackName = function (track_id) {
                 var res;
-                DZ.api('/track/' + id, function (track) {
+                DZ.api('/track/' + track_id, function (track) {
                      res = track.title;
                 });
                 return res;
@@ -108,10 +108,11 @@
                 }
             };
 
-            $scope.filterTracks = function (albumID){
+            <!--afficher les chansons d'un album??? -->
+            $scope.filterTracks = function(albumID){
                 var res = [];
                 var id = 0;
-                for(var i=0;i<$scope.albums.length;i++){
+                for(var i=0; i < $scope.albums.length; i++){
                     if($scope.albums[i].id == albumID) {
                         id = i;
                         break;
@@ -125,7 +126,7 @@
             };
 
 
-            <!--ajouter les chansons d'un album dans musicPlayer-->
+            <!--ajouter les chansons d'un album dans music Player-->
             $scope.addAlbumsTracks = function() {
                 $scope.musicPlayer.putAlbumTracks($("#albumID").val());
             };
@@ -144,11 +145,11 @@
 
             $scope.inPlaylist = function(){
                 return true;
-            }
+            };
 
 
             ///////////////////////////////////
-            // FONCTION DE PLAYER DEEZER //////
+            // FONCTIONS DE PLAYER DEEZER //////
             ///////////////////////////////////
 
             // Joue les tracks de la playlist du serveur
@@ -163,14 +164,14 @@
             $scope.playCurrentTrack = function() {
                 var track = $scope.musicPlayer.getCurrentTrack();
                 DZ.player.playTracks( [track] );
-                // On peut ajouter un un index et un offset pour commencer à une certaine chanson et à un certain moment
+                // On peut ajouter un index et un offset pour commencer à une certaine chanson et à un certain moment
                 // DZ.player.playTracks( [track], index, offset);
             };
 
             $scope.playNextTrack = function() {
                 var track = $scope.musicPlayer.getNextTrack();
                 DZ.player.playTracks( [track] );
-                // On peut ajouter un un index et un offset pour commencer à une certaine chanson et à un certain moment
+                // On peut ajouter un index et un offset pour commencer à une certaine chanson et à un certain moment
                 // DZ.player.playTracks( [track], index, offset);
             };
 
@@ -205,7 +206,7 @@
                 console.log("Player position",  e);
             });
 
-            //Indique des information sur une track qui démarre
+            //Indique des informations sur une track qui démarre
             DZ.Event.subscribe('current_track', function(track){
                 console.log("infoTrack",  track);
             });
