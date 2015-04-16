@@ -63,10 +63,12 @@
             $scope.proposedTracks = $scope.musicPlayer.getProposedTracks();
             $scope.currentTrack   = $scope.proposedTracks[0];
             $scope.previousTracks = $scope.musicPlayer.getPreviousTracks();
+            $scope.nextTrack = null;
             $scope.albums = $scope.musicPlayer.getAlbums();
             $scope.tracks = $scope.musicPlayer.getTracks();
             $scope.ismute = false;
-            $scope.offset = null;
+            $scope.offset = $scope.musicPlayer.getPositionTrack();
+            $scope.teteLecture = false;
 
             $scope.currentTrackName  = null;
             $scope.currentTrackArtist = null;
@@ -203,6 +205,9 @@
 
             //Indique la position du player
             DZ.Event.subscribe('player_position', function(e){
+                if(e%10){
+                    // Post en donnant position + currentTrack
+                }
                 console.log("Player position",  e);
             });
 
@@ -213,14 +218,18 @@
 
 
             DZ.Event.subscribe('track_end', function(end){
-                if(end){
-                    $scope.playNextTrack();
+                if(end && $scope.teteLecture){
+                    //Fonction post de vote
+                }
+                else
+                {
+                    $scope.playNextTrack()  //play la track suivante votées
                 }
             });
 
             DZ.Event.subscribe('player_loaded', function(){
                 $scope.getTrackInfo();
-//                DZ.player.playTracks( [$scope.currentTrack] );
+                DZ.player.playTracks( [$scope.currentTrack], 0, $scope.offset);
             });
 
 
@@ -237,6 +246,7 @@
             var PROPOSED_TRACKS_URI = 'http://localhost:3000/playlist/proposedTracks';
             var PREVIOUS_TRACKS_URI = 'http://localhost:3000/playlist/previousTracks';
             var NEXT_TRACK_URI      = 'http://localhost:3000/playlist/nextTrack';
+            var POSITION_TRACK_URI  = 'http://localhost:3000/playlist/position';
             var GET_ALBUMS          = 'http://localhost:3000/albums';
             var GET_TRACKS          = 'http://localhost:3000/tracks';
             var PUT_ALBUMS_TRACKS   = 'http://localhost:3000/tracks/album/{_}';
@@ -264,6 +274,11 @@
             this.getNextTrack = function(){
                 var nextTrack = this.doRequest('POST', NEXT_TRACK_URI, null);
                 return nextTrack;
+            };
+
+            this.getPositionTrack = function(){
+                var positionTrack = this.doRequest('GET', POSITION_TRACK_URI, null);
+                return positionTrack;
             };
 
             <!--récupérer les albums-->
