@@ -113,15 +113,8 @@
             <!--afficher les chansons d'un album??? -->
             $scope.filterTracks = function(albumID){
                 var res = [];
-                var id = 0;
-                for(var i=0;i<$scope.albums.length;i++){
-                    if($scope.albums[i].deezerID == albumID) {
-                        id = i;
-                        break;
-                    }
-                }
                 angular.forEach($scope.tracks, function(track, j){
-                    if(track.albumID == id)
+                    if(track.albumID == albumID)
                         res.push(track);
                 });
                 return res;
@@ -145,28 +138,16 @@
             $scope.getAllTracksInfo();
             <!-- ??? -->
 
-            $scope.notInPlaylist = function(deezerID){
-                var id=0;
-                for(id;id<$scope.tracks.length;id++){
-                    if($scope.tracks[id].deezerID==deezerID)
-                        break;
-                }
+            $scope.notInPlaylist = function(id){
                 for(var i=0;i<$scope.proposedTracks.length;i++){
-                    if($scope.proposedTracksName[i].trackID==id){
-                        return true;
-                        console.log(true);
+                    if($scope.proposedTracks[i].trackID==id){
+                        return false;
                     }
                 }
-                console.log(false);
-                return false;
+                return true;
             }
 
-            $scope.addToPlaylist = function(deezerID){
-                var id=0;
-                for(id;id<$scope.tracks.length;id++){
-                    if($scope.tracks[id].deezerID==deezerID)
-                        break;
-                }
+            $scope.addToPlaylist = function(id){
                 $scope.musicPlayer.putProposedTrack(id);
             }
             ///////////////////////////////////
@@ -177,7 +158,7 @@
             $scope.playTracks = function() {
                 $scope.proposedTracks = $scope.musicPlayer.getProposedTracks();
                 console.log($scope.proposedTracks);
-                DZ.player.playTracks( [$scope.proposedTracks], 0, 280 );
+                DZ.player.playTracks( [$scope.proposedTracks[0].deezerID], 0, 280 );
                 $scope.$apply();
             };
 

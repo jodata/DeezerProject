@@ -66,26 +66,34 @@ app.get('/playlist/previousTracks', function (request, response) {
 });
 
 app.get('/albums', function (request, response) {
-    couchDBClient.GET('Albums',function(resp){
-        response.json(resp);
+    db.get('Albums', { data: true }, function(err, body) {
+        if (!err){
+            response.json(body.data);
+        }
     });
 });
 
 app.get('/albums/:id', function (request, response) {
-    couchDBClient.GET('Albums',function(resp){
-        response.send(resp[request.params.id]);
+    db.get('Albums', { data: true }, function(err, body) {
+        if (!err){
+            response.send(resp[request.params.id]);
+        }
     });
 });
 
 app.get('/tracks', function (request, response) {
-    couchDBClient.GET('Tracks',function(resp){
-       response.json(resp);
+    db.get('Tracks', { data: true }, function(err, body) {
+        if (!err){
+            response.json(body.data);
+        }
     });
 });
 
 app.get('/tracks/:id', function (request, response) {
-    couchDBClient.GET('Tracks',function(resp){
-       response.json(resp[request.params.id]);
+    db.get('Tracks', { data: true }, function(err, body) {
+        if (!err){
+            response.send(resp[request.params.id]);
+        }
     });
 });
 
@@ -95,51 +103,65 @@ app.get('/tracks/:id', function (request, response) {
 
 app.put('/tracks/album/:albumID', function (request, response) {
     if(!isPutting) {
-        var albumID = request.params.albumID;
-        couchDBClient.GET('Albums', function (albums) {
-            couchDBClient.GETall('Tracks', function (jsonData) {
-                new deezer().getAlbumTracks(albums[albumID].deezerID, function (resp) {
-                    var tracks = resp;
-                    for (var i = 0; i < tracks.length; i++) {
-                        notInTable(jsonData.data, tracks[i].id, function (id) {
-                            console.log(tracks[i].title +" "+id);
-                            if (id == -1) {
-                                jsonData.data.push({deezerID : tracks[i].id,title:tracks[i].title,preview:tracks[i].preview,albumID:albumID});
-                            } else console.log("in Table");
+        var albumID = parseInt(request.params.albumID);
+        db.get('Albums', { data: true }, function(err, body) {
+            if (!err) {
+                var albums=body.data;
+                db.get('Tracks', { data: true }, function(err, jsonData) {
+                    if (!err) {
+                        new deezer().getAlbumTracks(albums[albumID].deezerID, function (resp) {
+                            var tracks = resp;
+                            var offset_id = jsonData.data.length;
+                            for (var i = 0; i < tracks.length; i++) {
+                                notInTable(jsonData.data, tracks[i].id, function (id) {
+                                    console.log(tracks[i].title + " " + id);
+                                    if (id == -1) {
+                                        jsonData.data.push({
+                                            id:offset_id+i,
+                                            deezerID: tracks[i].id,
+                                            title: tracks[i].title,
+                                            preview: tracks[i].preview,
+                                            albumID: albumID
+                                        });
+                                    } else console.log("in Table");
+                                });
+                            }
+                            db.insert(jsonData, function (err, body) {
+                                if (!err) {
+                                    response.send(body.ok);
+                                } else {
+                                    response.send(body);
+                                    console.log(body);
+                                }
+                            });
                         });
                     }
-                    db.insert(jsonData,function(err,body){
-                       if(!err){
-                           response.send(body.ok);
-                       }else{
-                           response.send(body);
-                           console.log(body);
-                       }
-                    });
                 });
-            });
+            }
         });
     }
 });
 
 app.put('/playlist/:trackID', function(request, response) {
-    var trackID = request.params.trackID;
-    new couchDBClient.GETall("ProposedTracks", function(jsonData){
-        notInProposedTracks(jsonData.data, trackID, function(id){
-            console.log(id);
-            if(id>-1){
-                response.send(jsonData.data[id].vote.toString());
-            } else {
-                jsonData.data.push({trackID : trackID, votes:0,status:'playlist'});
-                db.insert(jsonData,function(err,body){
-                    if(!err){
-                        response.send(body.ok);
-                    }else{
-                        response.send("erreur");
-                    }
-                });
-            }
-        });
+    var trackID = parseInt(request.params.trackID);
+    db.get('ProposedTracks', { data: true }, function(err, jsonData) {
+        if (!err) {
+            notInProposedTracks(jsonData.data, trackID, function (id) {
+                console.log(id);
+                if (id > -1) {
+                    response.send(jsonData.data[id].vote.toString());
+                } else {
+                    jsonData.data.push({trackID: trackID, votes: 0, status: 'playlist'});
+                    db.insert(jsonData, function (err, body) {
+                        if (!err) {
+                            response.send(body.ok);
+                        } else {
+                            response.send("erreur");
+                        }
+                    });
+                }
+            });
+        }
     });
 });
 
