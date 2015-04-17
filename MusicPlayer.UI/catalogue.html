@@ -5,7 +5,8 @@
         <input type="text" placeholder="Search..." class="form-control" ng-model="query"/>
 
         <div ng-show="loading" id="load-text">Loading...</div>
-        <!--display des tracks sous forme d'un tableau avec accordion-bootstrap-->
+
+        <!--afficher des tracks sous forme d'un tableau avec accordion-bootstrap-->
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
             <div class="panel panel-default accordeon-item clearfix"
                  ng-repeat="(fIndex, album) in albums | filter:query">

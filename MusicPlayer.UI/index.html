@@ -63,10 +63,12 @@
             $scope.proposedTracks = $scope.musicPlayer.getProposedTracks();
             $scope.currentTrack   = $scope.proposedTracks[0];
             $scope.previousTracks = $scope.musicPlayer.getPreviousTracks();
+            $scope.nextTrack = null;
             $scope.albums = $scope.musicPlayer.getAlbums();
             $scope.tracks = $scope.musicPlayer.getTracks();
             $scope.ismute = false;
-            $scope.offset = null;
+            $scope.offset = $scope.musicPlayer.getPositionTrack();
+            $scope.teteLecture = false;
 
             $scope.currentTrackName  = null;
             $scope.currentTrackArtist = null;
@@ -90,9 +92,9 @@
             $scope.getTrackInfo();
 
             // A Modifier Ne fonctionne pas
-            $scope.getTrackName = function (id) {
+            $scope.getTrackName = function (track_id) {
                 var res;
-                DZ.api('/track/' + id, function (track) {
+                DZ.api('/track/' + track_id, function (track) {
                      res = track.title;
                 });
                 return res;
@@ -108,7 +110,8 @@
                 }
             };
 
-            $scope.filterTracks = function (albumID){
+            <!--afficher les chansons d'un album??? -->
+            $scope.filterTracks = function(albumID){
                 var res = [];
                 var id = 0;
                 for(var i=0;i<$scope.albums.length;i++){
@@ -125,7 +128,7 @@
             };
 
 
-            <!--ajouter les chansons d'un album dans musicPlayer-->
+            <!--ajouter les chansons d'un album dans music Player-->
             $scope.addAlbumsTracks = function() {
                 $scope.musicPlayer.putAlbumTracks($("#albumID").val());
             };
@@ -167,7 +170,7 @@
                 $scope.musicPlayer.putProposedTrack(id);
             }
             ///////////////////////////////////
-            // FONCTION DE PLAYER DEEZER //////
+            // FONCTIONS DE PLAYER DEEZER //////
             ///////////////////////////////////
 
             // Joue les tracks de la playlist du serveur
@@ -182,14 +185,14 @@
             $scope.playCurrentTrack = function() {
                 var track = $scope.musicPlayer.getCurrentTrack();
                 DZ.player.playTracks( [track] );
-                // On peut ajouter un un index et un offset pour commencer à une certaine chanson et à un certain moment
+                // On peut ajouter un index et un offset pour commencer à une certaine chanson et à un certain moment
                 // DZ.player.playTracks( [track], index, offset);
             };
 
             $scope.playNextTrack = function() {
                 var track = $scope.musicPlayer.getNextTrack();
                 DZ.player.playTracks( [track] );
-                // On peut ajouter un un index et un offset pour commencer à une certaine chanson et à un certain moment
+                // On peut ajouter un index et un offset pour commencer à une certaine chanson et à un certain moment
                 // DZ.player.playTracks( [track], index, offset);
             };
 
@@ -221,24 +224,31 @@
 
             //Indique la position du player
             DZ.Event.subscribe('player_position', function(e){
+                if(e%10){
+                    // Post en donnant position + currentTrack
+                }
                 console.log("Player position",  e);
             });
 
-            //Indique des information sur une track qui démarre
+            //Indique des informations sur une track qui démarre
             DZ.Event.subscribe('current_track', function(track){
                 console.log("infoTrack",  track);
             });
 
 
             DZ.Event.subscribe('track_end', function(end){
-                if(end){
-                    $scope.playNextTrack();
+                if(end && $scope.teteLecture){
+                    //Fonction post de vote
+                }
+                else
+                {
+                    $scope.playNextTrack()  //play la track suivante votées
                 }
             });
 
             DZ.Event.subscribe('player_loaded', function(){
                 $scope.getTrackInfo();
-//                DZ.player.playTracks( [$scope.currentTrack] );
+                DZ.player.playTracks( [$scope.currentTrack], 0, $scope.offset);
             });
 
 
@@ -255,6 +265,7 @@
             var PROPOSED_TRACKS_URI = 'http://localhost:3000/playlist/proposedTracks';
             var PREVIOUS_TRACKS_URI = 'http://localhost:3000/playlist/previousTracks';
             var NEXT_TRACK_URI      = 'http://localhost:3000/playlist/nextTrack';
+            var POSITION_TRACK_URI  = 'http://localhost:3000/playlist/position';
             var GET_ALBUMS          = 'http://localhost:3000/albums';
             var GET_TRACKS          = 'http://localhost:3000/tracks';
             var PUT_ALBUMS_TRACKS   = 'http://localhost:3000/tracks/album/{_}';
@@ -269,7 +280,6 @@
             <!--récupérer les chansons choisies dans le catalogue-->
             this.getProposedTracks = function (){
                 var proposedTracks = this.doRequest('GET', PROPOSED_TRACKS_URI, null);
-                console.log(proposedTracks);
                 return proposedTracks;
             };
 
@@ -283,6 +293,11 @@
             this.getNextTrack = function(){
                 var nextTrack = this.doRequest('POST', NEXT_TRACK_URI, null);
                 return nextTrack;
+            };
+
+            this.getPositionTrack = function(){
+                var positionTrack = this.doRequest('GET', POSITION_TRACK_URI, null);
+                return positionTrack;
             };
 
             <!--récupérer les albums-->
