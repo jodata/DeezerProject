@@ -4,9 +4,9 @@
     <title>Get The Sound</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="styles/bootstrap.min.css" rel="stylesheet">
+    <link href="styles/bootstrap.min.css" rel="stylesheet" type="text/css">
     <!--style css pour l'interface-->
-    <link href="styles/interface.css" rel="stylesheet">
+    <link href="styles/interface.css" rel="stylesheet" type="text/css">
 </head>
 
 <body ng-app="MusicPlayerApp">
@@ -61,7 +61,8 @@
             //this.musicPlayer = new MusicPlayerRestClient();
             $scope.musicPlayer = new MusicPlayerRestClient();
             $scope.proposedTracks = $scope.musicPlayer.getProposedTracks();
-            $scope.currentTrack   = $scope.proposedTracks[0];
+            $scope.currentTrack   = $scope.musicPlayer.getCurrentTrack();
+            $scope.afterTrack = $scope.musicPlayer.getAfterTrack();
             $scope.previousTracks = $scope.musicPlayer.getPreviousTracks();
             $scope.nextTrack = null;
             $scope.albums = $scope.musicPlayer.getAlbums();
@@ -148,6 +149,7 @@
             }
 
             $scope.addToPlaylist = function(id){
+                $scope.proposedTracks.push($scope.tracks[id]);
                 $scope.musicPlayer.putProposedTrack(id);
             }
             ///////////////////////////////////
@@ -157,7 +159,6 @@
             // Joue les tracks de la playlist du serveur
             $scope.playTracks = function() {
                 $scope.proposedTracks = $scope.musicPlayer.getProposedTracks();
-                console.log($scope.proposedTracks);
                 DZ.player.playTracks( [$scope.proposedTracks[0].deezerID], 0, 280 );
                 $scope.$apply();
             };
@@ -243,6 +244,7 @@
         function MusicPlayerRestClient(){
 
             var CURRENT_TRACK_URI   = 'http://localhost:3000/playlist/currentTrack';
+            var AFTER_TRACK_URI     = 'http://localhost:3000/playlist/afterTrack';
             var PROPOSED_TRACKS_URI = 'http://localhost:3000/playlist/proposedTracks';
             var PREVIOUS_TRACKS_URI = 'http://localhost:3000/playlist/previousTracks';
             var NEXT_TRACK_URI      = 'http://localhost:3000/playlist/nextTrack';
@@ -256,6 +258,12 @@
             this.getCurrentTrack = function(){
                 var currentTrack = this.doRequest('GET', CURRENT_TRACK_URI, null);
                 return currentTrack;
+            };
+
+            <!--récupérer la chanson courante-->
+            this.getAfterTrack = function(){
+                var afterTrack = this.doRequest('GET', AFTER_TRACK_URI, null);
+                return afterTrack;
             };
 
             <!--récupérer les chansons choisies dans le catalogue-->

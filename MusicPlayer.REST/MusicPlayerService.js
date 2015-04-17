@@ -2,7 +2,6 @@
 var express    = require('express');
 var bodyParser = require('body-parser');
 var cors       = require('cors');
-var couchDBClient = require('./couchDBClient');
 var deezer = require('./DeezerClient');
 var nano = require('nano')('http://localhost:5984');
 var db = nano.db.use('deezer');
@@ -11,22 +10,40 @@ var app = express();
 app.use(bodyParser.json());
 app.use( cors() );
 
-var couchDBClient = new couchDBClient();
 
+var albums;
+var tracks;
 var currentTrack   = null;
-var proposedTracks;
-db.get('ProposedTracks', { data: true }, function(err, body) {
-    if (!err){
-        proposedTracks=body.data;
-    }
-});
-var previousTracks = [ ];
-var albums = [ ];
+var afterTrack   = null;
+var proposedTracks = [];
+
 db.get('Albums', { data: true }, function(err, body) {
     if (!err){
         albums=body.data;
+        db.get('Tracks', { data: true }, function(err, body) {
+            if (!err) {
+                tracks = body.data;
+                db.get('ProposedTracks', { data: true }, function(err, body) {
+                    if (!err){
+                        for(var i=0;i<body.data.length;i++){
+                            var prevTrack = body.data[i];
+                            var track = tracks[prevTrack.trackID];
+                            proposedTracks.push({trackID:prevTrack.trackID,deezerID:track.deezerID,title:track.title,artist:albums[track.albumID].artist,cover:albums[track.albumID].cover,votes:prevTrack.votes});
+                        }
+                        currentTrack=proposedTracks.shift();
+                        afterTrack=proposedTracks.shift();
+                    }
+                });
+            }else{
+                console.log(err);
+            }
+        });
     }
 });
+
+
+var previousTracks = [ ];
+
 var isPutting = false;
 
 /**Tools**/
@@ -55,6 +72,10 @@ var notInProposedTracks = function(data,id,callback){
 
 app.get('/playlist/currentTrack', function (request, response) {
     response.json(currentTrack);
+});
+
+app.get('/playlist/afterTrack', function (request, response) {
+    response.json(afterTrack);
 });
 
 app.get('/playlist/proposedTracks', function (request, response) {
@@ -170,13 +191,9 @@ app.put('/playlist/:trackID', function(request, response) {
  **********/
 app.post('/playlist/nextTrack', function (request, response) {
     previousTracks.push(currentTrack);
+    if(previousTracks.length>3)
+        previousTracks.shift();
     currentTrack = proposedTracks.shift();
-
-
-    console.log("Current Track: "   + currentTrack);
-    console.log("Proposed Tracks: " + proposedTracks);
-    console.log("Previous Tracks: " + previousTracks);
-    console.log("");
 
     response.json(currentTrack);
 });

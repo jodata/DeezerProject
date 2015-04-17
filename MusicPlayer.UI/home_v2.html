@@ -1,324 +1,33 @@
-<style>
-    @font-face {
-        font-family: "Top Secret";
-        src: url(fonts/Top%20Secret.ttf);
-    }
-    @font-face {
-        font-family: "Roboto Light";
-        src: url(http://fonts.googleapis.com/css?family=Roboto:100);
-    }
-    html, body, .ng-scope, .playlist-track{
-        background-color: #ddd;
-    }
-    #tab_content h3 {
-        border-bottom: solid 1px darkorange;
-    }
-    .track {
-        font-family: 'Roboto Light', sans-serif;
-        font-size: large;
-    }
-    .white-gradient {
-        padding-right: 10px;
-        background-color: #fff;
-        /*background: -moz-linear-gradient(left,  rgba(255,255,255,1) 0%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,0) 100%); /!* FF3.6+ *!/*/
-        /*background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,1)), color-stop(50%,rgba(255,255,255,0.9)), color-stop(100%,rgba(255,255,255,0))); /!* Chrome,Safari4+ *!/*/
-        /*background: -webkit-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.9) 50%,rgba(255,255,255,0) 100%); /!* Chrome10+,Safari5.1+ *!/*/
-        /*background: -o-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.9) 50%,rgba(255,255,255,0) 100%); /!* Opera 11.10+ *!/*/
-        /*background: -ms-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.9) 50%,rgba(255,255,255,0) 100%); /!* IE10+ *!/*/
-        /*background: linear-gradient(to right,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.9) 50%,rgba(255,255,255,0) 100%); /!* W3C *!/*/
-        /*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=1 ); /!* IE6-9 *!/*/
-    }
-    .orange-gradient{
-        padding-right: 10px;
-        background-color: rgba(249,138,69,1);
-        /*background: -moz-linear-gradient(left,  rgba(249,138,69,1) 0%, rgba(249,138,69,0.9) 50%, rgba(255,255,255,0) 100%); /!* FF3.6+ *!/*/
-        /*background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(249,138,69,1)), color-stop(50%,rgba(249,138,69,0.9)), color-stop(100%,rgba(255,255,255,0))); /!* Chrome,Safari4+ *!/*/
-        /*background: -webkit-linear-gradient(left,  rgba(249,138,69,1) 0%,rgba(249,138,69,0.9) 50%,rgba(255,255,255,0) 100%); /!* Chrome10+,Safari5.1+ *!/*/
-        /*background: -o-linear-gradient(left,  rgba(249,138,69,1) 0%,rgba(249,138,69,0.9) 50%,rgba(255,255,255,0) 100%); /!* Opera 11.10+ *!/*/
-        /*background: -ms-linear-gradient(left,  rgba(249,138,69,1) 0%,rgba(249,138,69,0.9) 50%,rgba(255,255,255,0) 100%); /!* IE10+ *!/*/
-        /*background: linear-gradient(to right,  rgba(249,138,69,1) 0%,rgba(249,138,69,0.9) 50%,rgba(255,255,255,0) 100%); /!* W3C *!/*/
-        /*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f98a45', endColorstr='#00ffffff',GradientType=1 ); /!* IE6-9 *!/*/
-    }
-    /**
-    * Les musiques qui viennent d'être jouées
-    **/
-    .prev-container{
-        width: 100%;
-        height: 133px;
-    }
-
-    .prev-track{
-        height: 70px;
-    }
-
-    .prev-img, .after-img{
-        -webkit-border-radius: 5px 0 0 5px;
-        border-radius: 5px 0 0 5px;
-        width: 20%;
-        display: inline-block;
-        vertical-align: top;
-    }
-    .prev-content, .after-content{
-        width: 80%;
-        height: 70px;
-        text-align: right;
-        display: inline-block;
-        -webkit-border-radius: 0 10px 10px 0;
-        border-radius: 0 10px 10px 0;
-    }
-
-    .track-artist, .track-title {
-        position: relative;
-        color: rgba(255, 165, 83, 1);
-        vertical-align: middle;
-    }
-    .track-title{
-        padding-top: 10px;
-    }
-    .track-artist{
-        padding-top: 5px;
-        color: #555;
-    }
-
-    /**
-    * Current : La music qui est en train d'être jouée
-    **/
-    #current-track{
-        margin-top: 20px;
-        margin-bottom: 20px;
-        height: 206px;
-    }
-    #on-air{
-        vertical-align: bottom;
-        position: relative;
-        text-align: center;
-        font-family: 'Top Secret';
-        color: darkred;
-        display: inline-block;
-    }
-    #current-logo {
-        margin-left: 10%;
-        width:10%;
-        display:inline-block ;
-    }
-    #current-img{
-        width: 18%;
-        height: 206px;
-        display: inline-block;
-        border-left: solid 5px darkorange;
-        -webkit-border-radius: 10px 0 0 10px;
-        border-radius: 10px 0 0 10px;
-    }
-    #current-content{
-        height: 206px;
-        vertical-align: middle;
-        width: 52%;
-        display: inline-block;
-        font-size: xx-large;
-        padding-left: 10px;
-        -webkit-border-radius: 0 10px 10px 0;
-        border-radius: 0 10px 10px 0;
-    }
-    #current-text{
-        text-align: left;
-        height: 50%;
-    }
-    #current-title{
-        color: #ffe7d4;
-        display: inline-block;
-    }
-    #current-plus{
-        text-align: center;
-        width: 100%;
-        height: 50%;
-    }
-    #current-play, #current-mute{
-        height: 53px;
-        width: 53px;
-        vertical-align: top;
-        margin-right: 10px;
-        margin-top: 26px;
-        border: solid 3px #ffe7d4;
-        color: #ffe7d4;
-        -webkit-border-radius: 25px;
-        border-radius: 25px;
-        padding: 8px 0 0 1px;
-    }
-    #current-mute{
-        padding-top: 9px;
-        padding-left: 3px;
-    }
-    #current-play:hover, #current-mute:hover{
-        color:#333;
-        border-color: #333;
-        background-color: rgba(255,255,255,0.6);
-        cursor: pointer;
-    }
-    /**
-    * After track : La chanson qui va etre jouee juste après la current
-    **/
-    .after-track{
-        display: inline-block;
-        width: 60%;
-        /*margin-right: 60px;*/
-        margin-top: 16px;
-    }
-    .after-img{
-        /*width: 70px;*/
-        /*border-left: solid 3px #FFF;*/
-        height: 70px;
-    }
-    #after-label{
-        height: 70px;
-        width: 20px;
-        vertical-align: top;
-        display: inline-block;
-        background-color: #000;
-        color: #FFF;
-    }
-    #after-label div{
-        margin-top: 28px;
-        -webkit-transform: rotate(-90deg);
-        transform: rotate(-90deg);
-    }
-    .after-content{
-        width: 74%;
-    }
-    /**
-    * Playlist : Mise en forme de la playlist dynamique
-    **/
-    .playlist-container{
-        width: 80%;
-        margin-left: 10%;
-    }
-    .playlist-track{
-        margin-bottom: 10px;
-        cursor: pointer;
-    }
-    .playlist-track:hover .playlist-vote{
-        content: "+1";
-        color: rgba(249,138,69,1);
-        border-color: rgba(249,138,69,1);
-    }
-    .playlist-track:hover .playlist-order{
-        background-color: rgba(249,138,69,1);
-    }
-    .playlist-img{
-        width: 70px;
-        display: inline-block;
-        vertical-align: top;
-    }
-    .playlist-content{
-        height: 70px;
-        width: 336px;
-        display: inline-block;
-        text-align: right;
-        -webkit-border-radius: 0 5px 5px 0;
-        border-radius: 0 5px 5px 0;
-    }
-    .playlist-order{
-        height: 70px;
-        width: 20px;
-        display: inline-block;
-        background-color: #333;
-        color: #FFF;
-        /*font-weight: bolder;*/
-        vertical-align: top;
-        text-align: center;
-        padding-top: 20px;
-        -webkit-border-radius: 5px 0 0 5px;
-        border-radius: 5px 0 0 5px;
-        -webkit-transition: background 500ms;
-        transition: background 500ms;
-    }
-    .playlist-text{
-        display: inline-block;
-        height: 100%;
-    }
-    .playlist-title, .playlist-artist{
-    }
-    .playlist-vote{
-        -webkit-border-radius: 15px;
-        border-radius: 15px;
-        border: solid 2px #333;
-        color: #333;
-        display: inline-block;
-        width: 30px;
-        height: 30px;
-        text-align: center;
-        padding-top: 2px;
-        padding-bottom: 2px;
-        vertical-align: top;
-        margin: 20px 0 20px 10px;
-        -webkit-transition: color 500ms, border 500ms;
-        transition: color 500ms, border 500ms;
-    }
-    .plus-one{
-        vertical-align: top;
-        float: left;
-        opacity: 0;
-        display: inline-block;
-        height: 100%;
-        width: 0;
-        padding-top:20px;
-        text-align: center;
-        background-color: rgba(255, 165, 83, 1);
-        color: #FFF;
-        -webkit-transition: width 500ms;
-        transition: width 500ms;
-    }
-    .playlist-track:hover .plus-one{
-        opacity: 1;
-        width: 50px;
-    }
-</style>
-<link href="styles/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="http://www.google.com/fonts#QuickUsePlace:quickUse/Family:Open+Sans+Condensed:300">
-<script src="scripts/bootstrap.min.js"></script>
-
+<div ng-controller="MusicPlayerController as musicPlayer">
 <div id="tab_content" class="container">
-    <div class="prev-container">
+    <div ng-if="previousTracks.length>0" class="prev-container">
         <h3 class="col-md-12">Previous Tracks</h3>
-        <div class="track prev-track col-md-4">
-            <img class="prev-img" src="img/test.jpg" alt="Au bout... - JJ Goldman"/><!--
-            --><div class="prev-content white-gradient">
-                <div class="track-title">Au bout de mes rêves</div>
-                <div class="track-artist">JJ Goldman</div>
-            </div>
-        </div>
-        <div class="track prev-track col-md-4">
-            <img class="prev-img" src="img/test.jpg" alt="Au bout... - JJ Goldman"/><!--
-            --><div class="prev-content white-gradient">
-                <div class="track-title">Au bout de mes rêves</div>
-                <div class="track-artist">JJ Goldman</div>
-            </div>
-        </div>
-        <div class="track prev-track col-md-4">
-            <img class="prev-img" src="img/test.jpg" alt="Au bout... - JJ Goldman"/><!--
-            --><div class="prev-content white-gradient">
-                <div class="track-title">Au bout de mes rêves</div>
-                <div class="track-artist">JJ Goldman</div>
+        <div ng-repeat="prevTrack in previousTracks" class="track prev-track col-md-4">
+            <img class="prev-img" src={{prevTrack.cover}} alt="{{prevTrack.title+' - '+prevTrack.artist}}"/><!--
+            --><div class="prev-content white-background">
+                <div class="track-title">{{prevTrack.title}}</div>
+                <div class="track-artist">{{prevTrack.artist}}</div>
             </div>
         </div>
     </div>
     <div id="current-track" class="track">
             <img id="current-logo" src="img/logo_light.png" alt="Share The Sound"/><!--
-        --><img id="current-img" src="img/test.jpg" alt="Salut Seb Pat"/><!--
-        --><div id="current-content" class="orange-gradient">
+        --><img id="current-img" src="{{currentTrack.cover}}" alt="{{currentTrack.title+' - '+currentTrack.artist}}"/><!--
+        --><div id="current-content" class="orange-background">
                 <div id="current-text">
-                    <div id="current-title" class="track-title">Salut jean mi</div>
+                    <div id="current-title" class="track-title">{{currentTrack.title}}</div>
                     <div id="on-air">{ON AIR}</div>
-                    <div id="current-artist" class="track-artist">Sébastien Patoche</div>
+                    <div id="current-artist" class="track-artist">{{currentTrack.artist}}</div>
                 </div>
                 <div id="current-plus">
                     <a ng-click="playTracks()"><span id="current-play" class="glyphicon glyphicon-play"></span></a>
                     <a ng-click="mute()"><span id="current-mute" class="glyphicon glyphicon-volume-off"></span></a>
                     <div class="track after-track">
-                        <img class="after-img" src="img/test.jpg" alt="Au bout... - JJ Goldman"/><!--
+                        <img class="after-img" src={{afterTrack.cover}} alt="{{afterTrack.title+' - '+afterTrack.artist}}"/><!--
                         --><div id="after-label"><div>next</div></div><!--
-                        --><div class="after-content white-gradient">
-                                <div class="track-title">Au bout de mes rêves</div>
-                                <div class="track-artist">JJ Goldman</div>
+                        --><div class="after-content white-background">
+                                <div class="track-title">{{afterTrack.title}}</div>
+                                <div class="track-artist">{{afterTrack.artist}}</div>
                             </div>
                     </div>
                 </div>
@@ -326,77 +35,18 @@
     </div>
     <div class="playlist-container">
         <h3 id="playlist-label" class="col-md-12">Playlist</h3>
-        <div class="track playlist-track col-md-6">
-            <div class="playlist-order">1</div><!--
-            --><img class="playlist-img" src="img/test_1.jpg" alt="JJ Gold"/><!--
-            --><div class="playlist-content white-gradient">
+        <div ng-repeat="proposedTrack in proposedTracks" class="track playlist-track col-md-6">
+            <div class="playlist-order">{{$index+1}}</div><!--
+            --><img class="playlist-img" src={{proposedTrack.cover}} alt="{{proposedTrack.title+' - '+proposedTrack.artist}}"/><!--
+            --><div class="playlist-content white-background">
                 <div class="plus-one">vote</div>
                 <div class="playlist-text">
-                    <div class="playlist-title track-title">Quand la musique est bonne</div>
-                    <div class="playlist-artist track-artist">Encore JJ</div>
+                    <div class="playlist-title track-title">{{proposedTrack.title}}</div>
+                    <div class="playlist-artist track-artist">{{proposedTrack.artist}}</div>
                 </div>
-                <div class="playlist-vote">4</div>
+                <div class="playlist-vote">{{proposedTrack.votes}}</div>
             </div>
-        </div>
-        <div class="track playlist-track col-md-6">
-            <div class="playlist-order">2</div><!--
-            --><img class="playlist-img" src="img/test_1.jpg" alt="JJ Gold"/><!--
-            --><div class="playlist-content white-gradient">
-            <div class="plus-one">vote</div>
-            <div class="playlist-text">
-                <div class="playlist-title track-title">Quand la musique est bonne</div>
-                <div class="playlist-artist track-artist">Encore JJ</div>
-            </div>
-            <div class="playlist-vote">3</div>
-        </div>
-        </div>
-        <div class="track playlist-track col-md-6">
-            <div class="playlist-order">3</div><!--
-            --><img class="playlist-img" src="img/test_1.jpg" alt="JJ Gold"/><!--
-            --><div class="playlist-content white-gradient">
-            <div class="plus-one">vote</div>
-            <div class="playlist-text">
-                <div class="playlist-title track-title">Quand la musique est bonne</div>
-                <div class="playlist-artist track-artist">Encore JJ</div>
-            </div>
-            <div class="playlist-vote">1</div>
-        </div>
-        </div>
-        <div class="track playlist-track col-md-6">
-            <div class="playlist-order">4</div><!--
-            --><img class="playlist-img" src="img/test_1.jpg" alt="JJ Gold"/><!--
-            --><div class="playlist-content white-gradient">
-            <div class="plus-one">vote</div>
-            <div class="playlist-text">
-                <div class="playlist-title track-title">Quand la musique est bonne</div>
-                <div class="playlist-artist track-artist">Encore JJ</div>
-            </div>
-            <div class="playlist-vote">1</div>
-        </div>
-        </div>
-        <div class="track playlist-track col-md-6">
-            <div class="playlist-order">5</div><!--
-            --><img class="playlist-img" src="img/test_1.jpg" alt="JJ Gold"/><!--
-            --><div class="playlist-content white-gradient">
-            <div class="plus-one">vote</div>
-            <div class="playlist-text">
-                <div class="playlist-title track-title">Quand la musique est bonne</div>
-                <div class="playlist-artist track-artist">Encore JJ</div>
-            </div>
-            <div class="playlist-vote">1</div>
-        </div>
-        </div>
-        <div class="track playlist-track col-md-6">
-            <div class="playlist-order">6</div><!--
-            --><img class="playlist-img" src="img/test_1.jpg" alt="JJ Gold"/><!--
-            --><div class="playlist-content white-gradient">
-            <div class="plus-one">vote</div>
-            <div class="playlist-text">
-                <div class="playlist-title track-title">Quand la musique est bonne</div>
-                <div class="playlist-artist track-artist">Encore JJ</div>
-            </div>
-            <div class="playlist-vote">0</div>
-        </div>
         </div>
     </div>
+</div>
 </div>
