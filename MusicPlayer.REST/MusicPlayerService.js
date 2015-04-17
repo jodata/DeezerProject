@@ -4,23 +4,44 @@ var bodyParser = require('body-parser');
 var cors       = require('cors');
 var couchDBClient = require('./couchDBClient');
 var deezer = require('./DeezerClient');
+var nano = require('nano')('http://localhost:5984');
+var db = nano.db.use('deezer');
 
 var app = express();
 app.use(bodyParser.json());
 app.use( cors() );
 
+var couchDBClient = new couchDBClient();
 
 var currentTrack   = null;
-var proposedTracks = [60946206, 60946207, 60946208, 60946209];
+var proposedTracks;
+db.get('ProposedTracks', { data: true }, function(err, body) {
+    if (!err){
+        proposedTracks=body.data;
+    }
+});
 var previousTracks = [ ];
 var albums = [ ];
-var couchDBClient = new couchDBClient();
+db.get('Albums', { data: true }, function(err, body) {
+    if (!err){
+        albums=body.data;
+    }
+});
 var isPutting = false;
 
 /**Tools**/
 var notInTable = function(data,id,callback){
     for(var i=0;i<data.length;i++){
         if(data[i].deezerID==id) {
+            callback(id);
+            return;
+        }
+    }
+    callback(-1);
+};
+var notInProposedTracks = function(data,id,callback){
+    for(var i=0;i<data.length;i++){
+        if(data[i].trackID==id) {
             callback(id);
             return;
         }
@@ -38,9 +59,6 @@ app.get('/playlist/currentTrack', function (request, response) {
 
 app.get('/playlist/proposedTracks', function (request, response) {
     response.json(proposedTracks);
-    /*couchDBClient.GET('ProposedTracks',function(resp){
-     response.json(resp);
-     });*/
 });
 
 app.get('/playlist/previousTracks', function (request, response) {
@@ -78,27 +96,25 @@ app.get('/tracks/:id', function (request, response) {
 app.put('/tracks/album/:albumID', function (request, response) {
     if(!isPutting) {
         var albumID = request.params.albumID;
-        console.log(albumID);
         couchDBClient.GET('Albums', function (albums) {
             couchDBClient.GETall('Tracks', function (jsonData) {
-                new deezer().getAlbumTracks(albums[albumID].id, function (resp) {
+                new deezer().getAlbumTracks(albums[albumID].deezerID, function (resp) {
                     var tracks = resp;
                     for (var i = 0; i < tracks.length; i++) {
                         notInTable(jsonData.data, tracks[i].id, function (id) {
+                            console.log(tracks[i].title +" "+id);
                             if (id == -1) {
-                                console.log(tracks[i].title);
-                                jsonData.data.push(JSON.parse('{' +
-                                '"deezerID" : "' + tracks[i].id +
-                                '", "title" : "' + tracks[i].title +
-                                '", "preview" : "' + tracks[i].preview +
-                                '", "albumID" : "' + albumID +
-                                '"}'));
+                                jsonData.data.push({deezerID : tracks[i].id,title:tracks[i].title,preview:tracks[i].preview,albumID:albumID});
                             } else console.log("in Table");
                         });
                     }
-                    couchDBClient.PUT('Tracks', jsonData, function (res) {
-                        console.log(res);
-                        response.end();
+                    db.insert(jsonData,function(err,body){
+                       if(!err){
+                           response.send(body.ok);
+                       }else{
+                           response.send(body);
+                           console.log(body);
+                       }
                     });
                 });
             });
@@ -109,15 +125,19 @@ app.put('/tracks/album/:albumID', function (request, response) {
 app.put('/playlist/:trackID', function(request, response) {
     var trackID = request.params.trackID;
     new couchDBClient.GETall("ProposedTracks", function(jsonData){
-        notInTable(jsonData.data, trackID, function(id){
+        notInProposedTracks(jsonData.data, trackID, function(id){
+            console.log(id);
             if(id>-1){
-                jsonData.data[id].vote++;
+                response.send(jsonData.data[id].vote.toString());
             } else {
-                jsonData.data.push(JSON.parse('{' +
-                '"trackID" : "' + trackID +
-                '", "votes" : "0"' +
-                '", "status" : "waiting"' +
-                '"}'));
+                jsonData.data.push({trackID : trackID, votes:0,status:'playlist'});
+                db.insert(jsonData,function(err,body){
+                    if(!err){
+                        response.send(body.ok);
+                    }else{
+                        response.send("erreur");
+                    }
+                });
             }
         });
     });

@@ -3,7 +3,10 @@
         font-family: "Top Secret";
         src: url(fonts/Top%20Secret.ttf);
     }
-    @import url(http://fonts.googleapis.com/css?family=Roboto:100);
+    @font-face {
+        font-family: "Roboto Light";
+        src: url(http://fonts.googleapis.com/css?family=Roboto:100);
+    }
     html, body, .ng-scope, .playlist-track{
         background-color: #ddd;
     }
@@ -11,7 +14,7 @@
         border-bottom: solid 1px darkorange;
     }
     .track {
-        font-family: 'Roboto', sans-serif;
+        font-family: 'Roboto Light', sans-serif;
         font-size: large;
     }
     .white-gradient {
@@ -139,7 +142,7 @@
         color: #ffe7d4;
         -webkit-border-radius: 25px;
         border-radius: 25px;
-        padding: 8px 0 0 0;
+        padding: 8px 0 0 1px;
     }
     #current-mute{
         padding-top: 9px;

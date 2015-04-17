@@ -1,5 +1,8 @@
 /*index.html*/
-@import url(http://fonts.googleapis.com/css?family=Roboto:300);
+@font-face {
+    font-family: "Roboto";
+    src:url(http://fonts.googleapis.com/css?family=Roboto:100);
+}
 body {
     margin: 0;
     padding: 0;
@@ -50,8 +53,8 @@ a {
     column-count: 3;
 }
 .add-to-playlist{
-    border : solid 3px rgba(255,140,0,1);
-    color: rgba(255,140,0,1);
+    border : solid 3px rgba(255,165,83,1);
+    color: rgba(255,165,83,1);
     height: 24px;
     width: 24px;
     padding-left: 3px;

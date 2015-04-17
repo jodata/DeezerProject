@@ -112,7 +112,7 @@
                 var res = [];
                 var id = 0;
                 for(var i=0;i<$scope.albums.length;i++){
-                    if($scope.albums[i].id == albumID) {
+                    if($scope.albums[i].deezerID == albumID) {
                         id = i;
                         break;
                     }
@@ -142,11 +142,30 @@
             $scope.getAllTracksInfo();
             <!-- ??? -->
 
-            $scope.inPlaylist = function(){
-                return true;
+            $scope.notInPlaylist = function(deezerID){
+                var id=0;
+                for(id;id<$scope.tracks.length;id++){
+                    if($scope.tracks[id].deezerID==deezerID)
+                        break;
+                }
+                for(var i=0;i<$scope.proposedTracks.length;i++){
+                    if($scope.proposedTracksName[i].trackID==id){
+                        return true;
+                        console.log(true);
+                    }
+                }
+                console.log(false);
+                return false;
             }
 
-
+            $scope.addToPlaylist = function(deezerID){
+                var id=0;
+                for(id;id<$scope.tracks.length;id++){
+                    if($scope.tracks[id].deezerID==deezerID)
+                        break;
+                }
+                $scope.musicPlayer.putProposedTrack(id);
+            }
             ///////////////////////////////////
             // FONCTION DE PLAYER DEEZER //////
             ///////////////////////////////////
@@ -250,6 +269,7 @@
             <!--récupérer les chansons choisies dans le catalogue-->
             this.getProposedTracks = function (){
                 var proposedTracks = this.doRequest('GET', PROPOSED_TRACKS_URI, null);
+                console.log(proposedTracks);
                 return proposedTracks;
             };
 
