@@ -1,4 +1,3 @@
-<div ng-controller="MusicPlayerController as musicPlayer">
 <div id="tab_content" class="container">
     <div ng-if="previousTracks.length>0" class="prev-container">
         <h3 class="col-md-12">Previous Tracks</h3>
@@ -22,7 +21,7 @@
                 <div id="current-plus">
                     <a ng-click="playTracks()"><span id="current-play" class="glyphicon glyphicon-play"></span></a>
                     <a ng-click="mute()"><span id="current-mute" class="glyphicon glyphicon-volume-off"></span></a>
-                    <div class="track after-track">
+                    <div ng-repeat="afterTrack in afterTracks" class="track after-track">
                         <img class="after-img" src={{afterTrack.cover}} alt="{{afterTrack.title+' - '+afterTrack.artist}}"/><!--
                         --><div id="after-label"><div>next</div></div><!--
                         --><div class="after-content white-background">
@@ -35,18 +34,19 @@
     </div>
     <div class="playlist-container">
         <h3 id="playlist-label" class="col-md-12">Playlist</h3>
-        <div ng-repeat="proposedTrack in proposedTracks" class="track playlist-track col-md-6">
-            <div class="playlist-order">{{$index+1}}</div><!--
-            --><img class="playlist-img" src={{proposedTrack.cover}} alt="{{proposedTrack.title+' - '+proposedTrack.artist}}"/><!--
-            --><div class="playlist-content white-background">
-                <div class="plus-one">vote</div>
-                <div class="playlist-text">
-                    <div class="playlist-title track-title">{{proposedTrack.title}}</div>
-                    <div class="playlist-artist track-artist">{{proposedTrack.artist}}</div>
+        <div ng-repeat="proposedTrack in proposedTracks | orderBy:'-votes'" class="track playlist-track col-md-6">
+            <div ng-click="addVote(proposedTrack.id)">
+                <div class="playlist-order">{{$index+1}}</div><!--
+                --><img class="playlist-img" src={{proposedTrack.cover}} alt="{{proposedTrack.title+' - '+proposedTrack.artist}}"/><!--
+                --><div class="playlist-content white-background">
+                    <div class="plus-one">vote</div>
+                    <div class="playlist-text">
+                        <div class="playlist-title track-title">{{proposedTrack.title}}</div>
+                        <div class="playlist-artist track-artist">{{proposedTrack.artist}}</div>
+                    </div>
+                    <div class="playlist-vote">{{proposedTrack.votes}}</div>
                 </div>
-                <div class="playlist-vote">{{proposedTrack.votes}}</div>
             </div>
         </div>
     </div>
-</div>
 </div>

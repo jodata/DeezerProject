@@ -11,10 +11,8 @@
 
 <body ng-app="MusicPlayerApp">
 
-    <div id="dz-root" class="row"></div>
-
-
     <div ng-controller="MusicPlayerController as musicPlayer">
+        <div id="dz-root"></div>
         <!--barre des onglets en haut-->
         <div ng-include="'includes/nav.html'"></div>
         <div ng-view></div>
@@ -36,7 +34,8 @@
             appId  : 'YOUR_APP_ID',
             channelUrl : 'http://YOUR_DOMAIN/channel.html',
             player: {
-                    onload: function() {}
+                    onload: function() {
+                    }
             }
         });
     </script>
@@ -47,8 +46,8 @@
 
         app.config(function($routeProvider){
             $routeProvider
-                    .when('/home', {templateUrl: 'home_v2.html'})
-                    .when('/catalogue', {templateUrl: 'catalogue.html'});
+                    .when('/home', {templateUrl: 'home_v2.html', controllers: 'MusicPlayerController'})
+                    .when('/catalogue', {templateUrl: 'catalogue.html', controllers: 'MusicPlayerController'});
         });
 
         app.controller('MusicPlayerController', MusicPlayerController);
@@ -62,53 +61,21 @@
             $scope.musicPlayer = new MusicPlayerRestClient();
             $scope.proposedTracks = $scope.musicPlayer.getProposedTracks();
             $scope.currentTrack   = $scope.musicPlayer.getCurrentTrack();
-            $scope.afterTrack = $scope.musicPlayer.getAfterTrack();
+
+            $scope.afterTracks = [];
+            $scope.afterTracks.push($scope.musicPlayer.getAfterTrack());
+
             $scope.previousTracks = $scope.musicPlayer.getPreviousTracks();
-            $scope.nextTrack = null;
+            $scope.isplaying = false;
             $scope.albums = $scope.musicPlayer.getAlbums();
             $scope.tracks = $scope.musicPlayer.getTracks();
             $scope.ismute = false;
-            $scope.offset = $scope.musicPlayer.getPositionTrack();
-            $scope.teteLecture = false;
-
-            $scope.currentTrackName  = null;
-            $scope.currentTrackArtist = null;
+            $scope.entete = false;
+            $scope.position = $scope.musicPlayer.getPositionTrack();
 
             <!--activer/afficher la page correspondante selon la location de l'utilisateur-->
             $scope.isActive = function(route) {
                 return route === $location.path();
-            };
-
-            <!--récupérer les infos d'une chanson depuis Deezer -->
-            $scope.getTrackInfo = function () {
-                DZ.api('/track/' + $scope.currentTrack, function (track) {
-                    $scope.currentTrackName  = track.title;
-                    $scope.currentTrackArtist = track.artist.name;
-                    $scope.currentTrackThumbailURL = track.album.cover;
-
-                    // Explanation: https://docs.angularjs.org/guide/scope
-                    $scope.$apply();
-                });
-            };
-            $scope.getTrackInfo();
-
-            // A Modifier Ne fonctionne pas
-            $scope.getTrackName = function (track_id) {
-                var res;
-                DZ.api('/track/' + track_id, function (track) {
-                     res = track.title;
-                });
-                return res;
-            };
-
-            <!--récupérer les infos des chansons choisies dans le catalogue -->
-            $scope.getAllTracksInfo = function () {
-
-                for (var i = 0; i < $scope.proposedTracks.length; i++) {
-                    DZ.api('/track/' + $scope.proposedTracks[i], function (track) {
-                        //$scope.proposedTracksName.push(track.title);
-                    });
-                }
             };
 
             <!--afficher les chansons d'un album??? -->
@@ -121,23 +88,19 @@
                 return res;
             };
 
-
             <!--ajouter les chansons d'un album dans music Player-->
             $scope.addAlbumsTracks = function() {
                 $scope.musicPlayer.putAlbumTracks($("#albumID").val());
             };
             <!--mettre à jour la playlist -->
             $scope.updatePlaylist = function () {
-
-                $scope.currentTrack   = $scope.musicPlayer.getCurrentTrack();
                 $scope.proposedTracks = $scope.musicPlayer.getProposedTracks();
+                $scope.currentTrack   = $scope.musicPlayer.getCurrentTrack();
+                $scope.afterTracks = [];
+                $scope.afterTracks.push($scope.musicPlayer.getAfterTrack());
                 $scope.previousTracks = $scope.musicPlayer.getPreviousTracks();
                 $scope.$apply();
             };
-
-            <!-- ??? -->
-            $scope.getAllTracksInfo();
-            <!-- ??? -->
 
             $scope.notInPlaylist = function(id){
                 for(var i=0;i<$scope.proposedTracks.length;i++){
@@ -146,36 +109,43 @@
                     }
                 }
                 return true;
-            }
+            };
 
-            $scope.addToPlaylist = function(id){
-                $scope.proposedTracks.push($scope.tracks[id]);
+            $scope.addToPlaylistBase = function(id){
                 $scope.musicPlayer.putProposedTrack(id);
-            }
+            };
+
+            $scope.addToPlaylist = function(trackID){
+                $scope.musicPlayer.postProposedTrack(trackID);
+                $scope.updatePlaylist(); // Provisoire
+                $scope.addVote($scope.proposedTracks[$scope.proposedTracks.length-1].id); // Provisoire
+            };
+
+            $scope.addVote = function(idTrack){
+                $scope.proposedTracks[idTrack].votes = $scope.musicPlayer.postAddVote(idTrack);
+            };
+
+            $scope.calculVotes = function(currentTrack){
+                $scope.musicPlayer.postCalculVotes(currentTrack);
+            };
+
+            $scope.givePosition = function(pos, trackID){
+                $scope.musicPlayer.postPosition(pos, trackID);
+            };
             ///////////////////////////////////
             // FONCTIONS DE PLAYER DEEZER //////
             ///////////////////////////////////
 
             // Joue les tracks de la playlist du serveur
             $scope.playTracks = function() {
-                $scope.proposedTracks = $scope.musicPlayer.getProposedTracks();
-                DZ.player.playTracks( [$scope.proposedTracks[0].deezerID], 0, 280 );
-                $scope.$apply();
+                DZ.player.playTracks( [$scope.currentTrack.deezerID], 0, $scope.position);
+                $scope.isplaying = true;
             };
 
-            // Joue la current track du server
-            $scope.playCurrentTrack = function() {
-                var track = $scope.musicPlayer.getCurrentTrack();
-                DZ.player.playTracks( [track] );
-                // On peut ajouter un index et un offset pour commencer à une certaine chanson et à un certain moment
-                // DZ.player.playTracks( [track], index, offset);
-            };
 
             $scope.playNextTrack = function() {
-                var track = $scope.musicPlayer.getNextTrack();
-                DZ.player.playTracks( [track] );
-                // On peut ajouter un index et un offset pour commencer à une certaine chanson et à un certain moment
-                // DZ.player.playTracks( [track], index, offset);
+                DZ.player.playTracks( [$scope.currentTrack.deezerID] );
+                $scope.isplaying = true;
             };
 
 
@@ -206,31 +176,27 @@
 
             //Indique la position du player
             DZ.Event.subscribe('player_position', function(e){
-                if(e%10){
-                    // Post en donnant position + currentTrack
+               if(e[0] % 5 < 0.3){
+                   $scope.proposedTracks = $scope.musicPlayer.getProposedTracks();
+                   $scope.$apply();
+                   $scope.givePosition(e[0], $scope.currentTrack.trackID);
                 }
-                console.log("Player position",  e);
             });
 
             //Indique des informations sur une track qui démarre
+
             DZ.Event.subscribe('current_track', function(track){
-                console.log("infoTrack",  track);
+                    console.log(track);
             });
 
-
             DZ.Event.subscribe('track_end', function(end){
-                if(end && $scope.teteLecture){
-                    //Fonction post de vote
-                }
-                else
-                {
-                    $scope.playNextTrack()  //play la track suivante votées
-                }
+                $scope.calculVotes($scope.currentTrack);
+                $scope.updatePlaylist();//A modifier pour ceux qui ont une musique de retard
+                $scope.playNextTrack();
             });
 
             DZ.Event.subscribe('player_loaded', function(){
-                $scope.getTrackInfo();
-                DZ.player.playTracks( [$scope.currentTrack], 0, $scope.offset);
+                $scope.playTracks();
             });
 
 
@@ -249,10 +215,13 @@
             var PREVIOUS_TRACKS_URI = 'http://localhost:3000/playlist/previousTracks';
             var NEXT_TRACK_URI      = 'http://localhost:3000/playlist/nextTrack';
             var POSITION_TRACK_URI  = 'http://localhost:3000/playlist/position';
+            var POST_ADD_VOTE       = 'http://localhost:3000/playlist/vote/{_}';
+            var POST_CALC_VOTES     = 'http://localhost:3000/playlist/calculVotes';
             var GET_ALBUMS          = 'http://localhost:3000/albums';
             var GET_TRACKS          = 'http://localhost:3000/tracks';
             var PUT_ALBUMS_TRACKS   = 'http://localhost:3000/tracks/album/{_}';
             var PUT_PROPOSED_TRACK  = 'http://localhost:3000/playlist/{_}';
+            var POST_PROPOSED_TRACK = 'http://localhost:3000/playlist/add/{_}';
 
             <!--récupérer la chanson courante-->
             this.getCurrentTrack = function(){
@@ -272,7 +241,7 @@
                 return proposedTracks;
             };
 
-            <!--récupérer les chansons suivantes-->
+            <!--récupérer les chansons précédente-->
             this.getPreviousTracks = function(){
                 var previousTracks = this.doRequest('GET', PREVIOUS_TRACKS_URI, null);
                 return previousTracks;
@@ -285,8 +254,28 @@
             };
 
             this.getPositionTrack = function(){
-                var positionTrack = this.doRequest('GET', POSITION_TRACK_URI, null);
-                return positionTrack;
+                var position = this.doRequest('GET', POSITION_TRACK_URI, null);
+                return position;
+            };
+
+            this.postAddVote = function(idTrack){
+                var url = POST_ADD_VOTE.replace('{_}',idTrack);
+                var addVote = this.doRequest('POST', url, null);
+                return addVote;
+            };
+
+            this.postCalculVotes = function(currentTrack){
+                this.doRequest('POST', POST_CALC_VOTES, JSON.stringify(currentTrack));
+            };
+
+            this.postProposedTrack = function(trackID) {
+                var url = POST_PROPOSED_TRACK.replace('{_}',trackID);
+                this.doRequest('POST', url, null);
+            };
+
+            this.postPosition = function(pos, trackID){
+                var data = JSON.stringify({pos : pos, trackID : trackID});
+                this.doRequest('POST', POSITION_TRACK_URI, data);
             };
 
             <!--récupérer les albums-->
@@ -321,6 +310,7 @@
                 $.ajax({
                     url:  url,
                     type: verb,
+                    contentType: "application/json; charset=utf-8",
                     data: data,
                     async: false,
                     success: function(resp) {
