@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Get The Sound</title>
+    <title>Share The Sound</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="styles/bootstrap.min.css" rel="stylesheet" type="text/css">
@@ -73,7 +73,7 @@
             $scope.entete = false;
             $scope.position = $scope.musicPlayer.getPositionTrack();
 
-            <!--activer/afficher la page correspondante selon la location de l'utilisateur-->
+            <!--affiche la page correspondante selon la location de l'utilisateur-->
             $scope.isActive = function(route) {
                 return route === $location.path();
             };
@@ -142,7 +142,7 @@
                 $scope.isplaying = true;
             };
 
-
+            //Joue la prochaine track après la mise à jour
             $scope.playNextTrack = function() {
                 DZ.player.playTracks( [$scope.currentTrack.deezerID] );
                 $scope.isplaying = true;
@@ -223,56 +223,61 @@
             var PUT_PROPOSED_TRACK  = 'http://localhost:3000/playlist/{_}';
             var POST_PROPOSED_TRACK = 'http://localhost:3000/playlist/add/{_}';
 
-            <!--récupérer la chanson courante-->
+            <!--récupère la chanson courante-->
             this.getCurrentTrack = function(){
                 var currentTrack = this.doRequest('GET', CURRENT_TRACK_URI, null);
                 return currentTrack;
             };
 
-            <!--récupérer la chanson courante-->
+            <!--récupère la chanson courante-->
             this.getAfterTrack = function(){
                 var afterTrack = this.doRequest('GET', AFTER_TRACK_URI, null);
                 return afterTrack;
             };
 
-            <!--récupérer les chansons choisies dans le catalogue-->
+            <!--récupère les chansons choisies dans le catalogue-->
             this.getProposedTracks = function (){
                 var proposedTracks = this.doRequest('GET', PROPOSED_TRACKS_URI, null);
                 return proposedTracks;
             };
 
-            <!--récupérer les chansons précédente-->
+            <!--récupère les chansons précédentes-->
             this.getPreviousTracks = function(){
                 var previousTracks = this.doRequest('GET', PREVIOUS_TRACKS_URI, null);
                 return previousTracks;
             };
 
-            <!--récupérer la chanson suivante-->
+            <!--récupère la chanson suivante-->
             this.getNextTrack = function(){
                 var nextTrack = this.doRequest('POST', NEXT_TRACK_URI, null);
                 return nextTrack;
             };
 
+            //Récupère la position actuelle de la chanson du serveur
             this.getPositionTrack = function(){
                 var position = this.doRequest('GET', POSITION_TRACK_URI, null);
                 return position;
             };
 
+            //Augmente le vote de 1 d'une track
             this.postAddVote = function(idTrack){
                 var url = POST_ADD_VOTE.replace('{_}',idTrack);
                 var addVote = this.doRequest('POST', url, null);
                 return addVote;
             };
 
+            //Réalise le calcul de la chanson suivante
             this.postCalculVotes = function(currentTrack){
                 this.doRequest('POST', POST_CALC_VOTES, JSON.stringify(currentTrack));
             };
 
+            //Ajoute une musique à la playliste
             this.postProposedTrack = function(trackID) {
                 var url = POST_PROPOSED_TRACK.replace('{_}',trackID);
                 this.doRequest('POST', url, null);
             };
 
+            //Envoie au serveur la position actuelle de la chanson du client
             this.postPosition = function(pos, trackID){
                 var data = JSON.stringify({pos : pos, trackID : trackID});
                 this.doRequest('POST', POSITION_TRACK_URI, data);
