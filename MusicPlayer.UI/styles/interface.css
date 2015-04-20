@@ -18,6 +18,54 @@ a {
 #navbar{
     font-weight: 500;
 }
+#nav-player{
+    height: 40px;
+    width: 400px;
+    float:left;
+    margin-left: 10px;
+    border-left:solid 2px rgba(249,138,69,1);
+    margin-top: 4px;
+    color:rgba(255,255,255,0.8);
+}
+#nav-player-play, #nav-player-mute{
+    height: 30px;
+    border: solid 3px rgba(255,255,255,0.8);
+    width: 30px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-top: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+#nav-player-play:hover, #nav-player-mute:hover{
+    color: rgba(249,138,69,1);
+    border-color: rgba(249,138,69,1);
+}
+#nav-player-play{
+    padding-left: 5px;
+    padding-top: 4px;
+}
+#nav-player-mute{
+    padding-left: 6px;
+    padding-top: 6px;
+}
+#nav-player-mute.muted{
+    color:rgba(255,255,255,0.6);
+    border: solid 3px rgba(255,255,255,0.6);
+}
+
+#nav-player-title, #nav-player-artist{
+    display: inline-block;
+    margin-top: 12px;
+    vertical-align: top;
+}
+#nav-player-title{
+    color: rgba(249,138,69,1);
+    margin-left: 10px;
+}
 /*footer*/
 .footer{
     text-align: center;
@@ -58,6 +106,7 @@ a {
 .add-to-playlist{
     border : solid 3px rgba(255,165,83,1);
     color: rgba(255,165,83,1);
+    background-color: rgba(0,0,0,0);
     height: 24px;
     width: 24px;
     padding-left: 3px;
@@ -97,7 +146,7 @@ a {
     font-family: "Top Secret";
     src: url(../fonts/Top%20Secret.ttf);
 }
-html, body, .ng-scope, .playlist-track{
+html, body, .track{
     background-color: #ddd;
 }
 #tab_content h3 {
@@ -205,6 +254,7 @@ html, body, .ng-scope, .playlist-track{
 #current-title{
     color: #ffe7d4;
     display: inline-block;
+    max-width: 410px;
 }
 #current-plus{
     text-align: center;
@@ -227,11 +277,21 @@ html, body, .ng-scope, .playlist-track{
     padding-top: 9px;
     padding-left: 3px;
 }
+#current-play{
+    padding-right: 3px;
+}
 #current-play:hover, #current-mute:hover{
     color:#333;
     border-color: #333;
-    background-color: rgba(255,255,255,0.6);
     cursor: pointer;
+}
+#current-mute.muted{
+    color:#333;
+    border-color: #333;
+}
+#current-mute.muted:hover{
+    border: solid 3px #ffe7d4;
+    color: #ffe7d4;
 }
 /**
 * After track : La chanson qui va etre jouee juste après la current
@@ -239,8 +299,8 @@ html, body, .ng-scope, .playlist-track{
 .after-track{
     display: inline-block;
     width: 60%;
-    /*margin-right: 60px;*/
     margin-top: 16px;
+    background-color: rgba(255,255,255,0);
 }
 .after-img{
     /*width: 70px;*/
@@ -252,7 +312,7 @@ html, body, .ng-scope, .playlist-track{
     width: 20px;
     vertical-align: top;
     display: inline-block;
-    background-color: #000;
+    background: #000;
     color: #FFF;
 }
 #after-label div{

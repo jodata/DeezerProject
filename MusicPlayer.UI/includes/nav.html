@@ -9,16 +9,16 @@
             </div>
 
             <ul class="nav navbar-nav">
-                <li ng-class="{active:isActive('/home')}"><a ng-click="getTrackInfo()" href="#/home">Playlist</a></li>
+                <li ng-class="{active:isActive('/home')}"><a href="#/home">Playlist</a></li>
                 <li ng-class="{active:isActive('/catalogue')}"><a href="#/catalogue">Catalogue</a></li>
-
+                <li ng-click="nextTrack()" style="cursor:pointer;"><a href="#/home">Next</a></li>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a ng-click="" href="#/"><span class="glyphicon glyphicon-asterisk"></span>
-                        Changer de style</a>
-                </li>
-            </ul>
+            <div id="nav-player" class="nav navbar-collapse">
+                <div id="nav-player-play" ng-click="playTracks()" class="glyphicon glyphicon-stop"></div>
+                <div id="nav-player-mute" ng-click="mute()" class="glyphicon glyphicon-volume-up"></div>
+                <div id="nav-player-title">{{currentTrack.title}}</div>
+                <div id="nav-player-artist">{{" - "+currentTrack.artist}}</div>
+            </div>
         </div>
     </div>
 </div>
