@@ -1,6 +1,6 @@
 <div id="tab-content" class="container">
         <!--recherche des musiques -->
-        <input type="text" placeholder="Search..." class="form-control" ng-model="query"/>
+        <input type="text" placeholder="Search..." class="form-control" ng-model="query" ng-change="getSearchResult(query)"/>
 
         <div ng-show="loading" id="load-text">Loading...</div>
 
@@ -20,9 +20,9 @@
                             <img src={{album.cover}} class="accordeon-img img-rounded">
 
                             <div class="accordeon-title">
-                                <span>{{album.title|limitTo:25}}{{album.title.length > 25 ? '...' : ''}}</span>
+                                <span>{{album.title|limitTo:22}}{{album.title.length > 21 ? '...' : ''}}</span>
                                 <div>
-                                    <strong>{{album.artist|limitTo:25}}{{album.artist.length > 25 ? '...' :''}}</strong>
+                                    <strong>{{album.artist|limitTo:20}}{{album.artist.length > 20 ? '...' :''}}</strong>
                                 </div>
                             </div>
                         </a>
@@ -41,6 +41,23 @@
                             </tr>
                         </table>
                     </div>
+                </div>
+            </div>
+            <div class="panel panel-default"
+                 ng-repeat="song in searchResult | orderBy:'title'">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <div title="{{song.title}}{{' - '+song.artist}}">
+                            <img src={{song.cover}} class="accordeon-img img-rounded">
+                            <div class="accordeon-title">
+                                <div>{{song.title+' - '+song.artist|limitTo:22}}{{song.title.length + song.artist.length > 21 ? '...' : ''}}</div>
+                                <div>
+                                    <strong>{{song.album|limitTo:20}}{{song.album.length > 20 ? '...' :''}}</strong>
+                                </div>
+                                <div class="add-to-catalog" ng-click="addToAlbums(albumID)"><span class="glyphicon glyphicon-plus add-catalog-btn"></span><span class="add-catalog-txt">Add to catalog</span></div>
+                            </div>
+                        </div>
+                    </h4>
                 </div>
             </div>
         </div>

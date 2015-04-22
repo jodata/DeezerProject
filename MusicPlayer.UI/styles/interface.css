@@ -20,7 +20,7 @@ a {
 }
 #nav-player{
     height: 40px;
-    width: 400px;
+    /*width: 400px;*/
     float:left;
     margin-left: 10px;
     border-left:solid 2px rgba(249,138,69,1);
@@ -56,7 +56,9 @@ a {
     color:rgba(255,255,255,0.6);
     border: solid 3px rgba(255,255,255,0.6);
 }
-
+#nav-player-play.stopped{
+    padding-left: 6px;
+}
 #nav-player-title, #nav-player-artist{
     display: inline-block;
     margin-top: 12px;
@@ -116,11 +118,38 @@ a {
     border-radius: 22px;
     cursor: pointer;
 }
-.add-to-playlist:hover{
+
+.add-to-catalog{
+    color: rgba(255,165,83,1);
+    height: 27px;
+    margin-top: 10px;
+    cursor: pointer;
+    font-weight: 500;
+}
+.add-catalog-btn{
+    border : solid 3px rgba(255,165,83,1);
+    color: rgba(255,165,83,1);
+    background-color: rgba(0,0,0,0);
+    height: 21px;
+    width: 21px;
+    padding-left: 1px;
+    padding-top: 0px;
+    -webkit-border-radius: 24px;
+    border-radius: 24px;
+    cursor: pointer;
+    vertical-align: top;
+}
+.add-catalog-txt{
+    vertical-align: bottom;
+    margin-left: 5px;
+}
+.add-to-playlist:hover,
+.add-to-catalog:hover,
+.add-to-catalog:hover .add-catalog-btn{
     border-color: #333;
     color:#333;
-    background-color: rgba(255,255,255,0.7);
 }
+
 @media only screen and (max-width:760px) {
     #accordion {
         -webkit-column-count: 1; /* Chrome, Safari, Opera */
@@ -157,12 +186,16 @@ html, body, .track{
     font-size: large;
 }
 .white-background {
-    padding-right: 10px;
     background-color: #fff;
 }
 .orange-background {
-    padding-right: 10px;
     background-color: rgba(249,138,69,1);
+}
+.green-background {
+    background-color: #67cd5d;
+}
+.darkgrey-background {
+    background-color: #333;
 }
 /**
 * Les musiques qui viennent d'être jouées
@@ -184,13 +217,14 @@ html, body, .track{
     display: inline-block;
     vertical-align: top;
 }
-.prev-content, .after-content{
+.prev-content, #after-content{
     width: 80%;
     height: 70px;
     text-align: right;
     display: inline-block;
     -webkit-border-radius: 0 10px 10px 0;
     border-radius: 0 10px 10px 0;
+    padding-right: 10px;
 }
 
 .track-artist, .track-title {
@@ -246,6 +280,7 @@ html, body, .track{
     padding-left: 10px;
     -webkit-border-radius: 0 10px 10px 0;
     border-radius: 0 10px 10px 0;
+    padding-right: 10px;
 }
 #current-text{
     text-align: left;
@@ -290,8 +325,11 @@ html, body, .track{
     border-color: #333;
 }
 #current-mute.muted:hover{
-    border: solid 3px #ffe7d4;
+    border-color: #ffe7d4;
     color: #ffe7d4;
+}
+#current-play.stopped{
+    padding-right: 0;
 }
 /**
 * After track : La chanson qui va etre jouee juste après la current
@@ -320,8 +358,9 @@ html, body, .track{
     -webkit-transform: rotate(-90deg);
     transform: rotate(-90deg);
 }
-.after-content{
+#after-content{
     width: 74%;
+    padding-right: 10px;
 }
 /**
 * Playlist : Mise en forme de la playlist dynamique
@@ -329,6 +368,32 @@ html, body, .track{
 .playlist-container{
     width: 80%;
     margin-left: 10%;
+}
+.search-btn{
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+    margin-left: 10px;
+    cursor: pointer;
+    height: 20px;
+    width: 20px;
+    color: #333;
+}
+.search-btn:hover{
+    color: rgba(249,138,69,1);
+}
+.search-btn.active{
+    color: rgba(249,138,69,1);
+}
+.search-btn.active:hover{
+    color: #333;
+}
+#playlist-search{
+    margin-bottom: 10px;
+    display: none;
+}
+#playlist-search{
+    margin-bottom: 10px;
+    display: none;
 }
 .playlist-track{
     margin-bottom: 10px;
@@ -354,12 +419,12 @@ html, body, .track{
     text-align: right;
     -webkit-border-radius: 0 5px 5px 0;
     border-radius: 0 5px 5px 0;
+    padding-right: 10px;
 }
 .playlist-order{
     height: 70px;
     width: 20px;
     display: inline-block;
-    background-color: #333;
     color: #FFF;
     /*font-weight: bolder;*/
     vertical-align: top;
@@ -394,21 +459,24 @@ html, body, .track{
     -webkit-transition: color 500ms, border 500ms;
     transition: color 500ms, border 500ms;
 }
-.plus-one{
+.plus-one,.vote-done{
     vertical-align: top;
     float: left;
-    opacity: 0;
+    opacity: 1;
     display: inline-block;
     height: 100%;
     width: 0;
     padding-top:20px;
     text-align: center;
-    background-color: rgba(255, 165, 83, 1);
     color: #FFF;
     -webkit-transition: width 500ms;
     transition: width 500ms;
 }
 .playlist-track:hover .plus-one{
-    opacity: 1;
+    /*opacity: 1;*/
+    width: 50px;
+}
+.playlist-track .plus-one.active{
+    /*opacity: 1;*/
     width: 50px;
 }

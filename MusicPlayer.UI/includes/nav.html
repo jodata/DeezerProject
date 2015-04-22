@@ -14,8 +14,8 @@
                 <li ng-click="nextTrack()" style="cursor:pointer;"><a href="#/home">Next</a></li>
             </ul>
             <div id="nav-player" class="nav navbar-collapse">
-                <div id="nav-player-play" ng-click="playTracks()" class="glyphicon glyphicon-stop"></div>
-                <div id="nav-player-mute" ng-click="mute()" class="glyphicon glyphicon-volume-up"></div>
+                <div id="nav-player-play" ng-click="playTracks()" class="glyphicon" ng-class="{'glyphicon-stop':isplaying,'glyphicon-play stopped':!isplaying}"></div>
+                <div id="nav-player-mute" ng-click="mute()" class="glyphicon" ng-class="{'glyphicon-volume-off muted':ismute,'glyphicon-volume-up':!ismute}"></div>
                 <div id="nav-player-title">{{currentTrack.title}}</div>
                 <div id="nav-player-artist">{{" - "+currentTrack.artist}}</div>
             </div>
