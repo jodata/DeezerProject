@@ -165,7 +165,7 @@
                 $scope.isplaying = true;
             };
 
-
+            //Coupe le son
             $scope.mute = function() {
                 if($scope.ismute)
                 {
@@ -183,14 +183,6 @@
                 }
             };
 
-            $scope.next = function() {
-                DZ.player.next();
-            };
-
-            $scope.changePosition = function(pos) {
-                DZ.player.seek(pos);
-            };
-
             ///////////////////////////////////
             // EVENEMENTS DU PLAYER DEEZER //////
             ///////////////////////////////////
@@ -204,18 +196,20 @@
                 }
             });
 
-            //Indique des informations sur une track qui démarre
 
+            //Indique des informations sur une track qui démarre
             DZ.Event.subscribe('current_track', function(track){
                     console.log(track);
             });
 
+            //Deezer event qui se déclenche à la fin d'une chanson
             DZ.Event.subscribe('track_end', function(end){
                 $scope.calculVotes($scope.currentTrack);
                 $scope.updatePlaylist();//A modifier pour ceux qui ont une musique de retard
                 $scope.playNextTrack();
             });
 
+            //Deezer event quand le player est prêt on lance la radio
             DZ.Event.subscribe('player_loaded', function(){
                 $scope.playTracks();
             });
