@@ -219,6 +219,8 @@
             DZ.Event.subscribe('player_position', function(e){
                if(e[0] % 5 < 0.3){
                    $scope.proposedTracks = $scope.musicPlayer.getProposedTracks();
+                   if(afterTrack==null)
+                       $scope.afterTrack=$scope.musicPlayer.getAfterTrack();
                    $scope.$apply();
                    $scope.givePosition(e[0], $scope.currentTrack.trackID);
                 }
