@@ -48,7 +48,7 @@
 
         app.config(function($routeProvider){
             $routeProvider
-                    .when('/home', {templateUrl: 'home_v2.html', controllers: 'MusicPlayerController'})
+                    .when('/home', {templateUrl: 'home.html', controllers: 'MusicPlayerController'})
                     .when('/catalogue', {templateUrl: 'catalogue.html', controllers: 'MusicPlayerController'})
                     .otherwise({redirectTo:'/home'});
         });
