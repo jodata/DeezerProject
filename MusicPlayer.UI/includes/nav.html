@@ -11,7 +11,7 @@
             <ul class="nav navbar-nav">
                 <li ng-class="{active:isActive('/home')}"><a href="#/home">Playlist</a></li>
                 <li ng-class="{active:isActive('/catalogue')}"><a href="#/catalogue">Catalog</a></li>
-                <li ng-click="nextTrack()" style="cursor:pointer;"><a href="#/home">Next</a></li>
+                <!--<li ng-click="nextTrack()" style="cursor:pointer;"><a href="#/home">Next</a></li> est utilisé pour les tests -->
             </ul>
             <div id="nav-player" class="nav navbar-collapse">
                 <div id="nav-player-play" ng-click="playTracks()" class="glyphicon" ng-class="{'glyphicon-stop':isplaying,'glyphicon-play stopped':!isplaying}"></div>
