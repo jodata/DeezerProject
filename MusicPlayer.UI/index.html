@@ -78,6 +78,7 @@
             $scope.position = $scope.musicPlayer.getPositionTrack();
 
             $scope.searchResult=[];
+
             <!--affiche la page correspondante selon la location de l'utilisateur-->
             $scope.isActive = function(route) {
                 return route === $location.path();
@@ -92,7 +93,12 @@
                 });
                 return res;
             };
-
+            $scope.addToAlbums = function(albumID){
+                $scope.searchResult=[];
+                $scope.albums = $scope.musicPlayer.postAlbum(albumID);
+                $scope.tracks = $scope.musicPlayer.getTracks();
+                $scope.$apply();
+            }
             <!--ajouter les chansons d'un album dans music Player-->
             $scope.addAlbumsTracks = function() {
                 $scope.musicPlayer.putAlbumTracks($("#albumID").val());
@@ -108,7 +114,7 @@
                         if($scope.voted[i]==$scope.afterTrack.trackID)
                             $scope.voted.splice(i,1);
                     }
-//                $scope.$apply();
+                $scope.$apply();
             };
 
             $scope.notInPlaylist = function(id){
@@ -150,6 +156,7 @@
                     $scope.recentVotedTrack = idTrack;
                     setTimeout(function(){
                         $scope.recentVotedTrack = -1;
+                        $scope.$apply();
                     },2000);
                 }
             };
@@ -298,12 +305,13 @@
             var POSITION_TRACK_URI  = 'http://localhost:3000/playlist/position';
             var POST_ADD_VOTE       = 'http://localhost:3000/playlist/vote/{_}';
             var POST_CALC_VOTES     = 'http://localhost:3000/playlist/calculVotes';
+            var POST_PROPOSED_TRACK = 'http://localhost:3000/playlist/add/{_}';
             var GET_ALBUMS          = 'http://localhost:3000/albums';
             var GET_TRACKS          = 'http://localhost:3000/tracks';
             var GET_SEARCH          = 'http://localhost:3000/search/{_}';
+            var POST_ALBUM          = 'http://localhost:3000/album/{_}';
             var PUT_ALBUMS_TRACKS   = 'http://localhost:3000/tracks/album/{_}';
             var PUT_PROPOSED_TRACK  = 'http://localhost:3000/playlist/{_}';
-            var POST_PROPOSED_TRACK = 'http://localhost:3000/playlist/add/{_}';
 
             <!--récupère la chanson courante-->
             this.getCurrentTrack = function(){
@@ -341,6 +349,7 @@
                 return position;
             };
 
+            //Renvoie le resultat d'une recherche sur Deezer
             this.getSearchResult = function(query){
                 var url = GET_SEARCH.replace('{_}',query);
                 var res = this.doRequest('GET', url, null);
@@ -381,6 +390,13 @@
             this.getTracks = function () {
                 var tracks = this.doRequest('GET', GET_TRACKS, null);
                 return tracks;
+            };
+
+            <!--un album-->
+            this.postAlbum = function(albumID){
+                var url = POST_ALBUM.replace('{_}',albumID);
+                var albums = this.doRequest('POST', url, null);
+                return albums;
             };
 
             <!--ajouter les chansons d'un album-->

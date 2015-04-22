@@ -1,6 +1,6 @@
 <div id="tab-content" class="container">
         <!--recherche des musiques -->
-        <input type="text" placeholder="Search..." class="form-control" ng-model="query" ng-change="getSearchResult(query)"/>
+        <input id="catalog-search" type="text" placeholder="Search..." class="form-control" ng-model="query" ng-change="getSearchResult(query)"/>
 
         <div ng-show="loading" id="load-text">Loading...</div>
 
@@ -36,25 +36,28 @@
                                 <td>{{$index+1}}</td>
                                 <td>{{track.title}}</td>
                                 <td ng-click="addToPlaylist(track.id)">
-                                    <span ng-if="notInPlaylist(track.id)" class="glyphicon glyphicon-plus add-to-playlist"></span>
+                                    <span ng-if="notInPlaylist(track.id)" class="add-catalog-btn">+</span>
                                 </td>
                             </tr>
                         </table>
                     </div>
                 </div>
             </div>
-            <div class="panel panel-default"
+            <div class="panel panel-default accordeon-item"
                  ng-repeat="song in searchResult | orderBy:'title'">
-                <div class="panel-heading">
+                <div class="panel-heading catalog-result"  ng-click="addToAlbums(song.albumID)">
                     <h4 class="panel-title">
                         <div title="{{song.title}}{{' - '+song.artist}}">
                             <img src={{song.cover}} class="accordeon-img img-rounded">
                             <div class="accordeon-title">
-                                <div>{{song.title+' - '+song.artist|limitTo:22}}{{song.title.length + song.artist.length > 21 ? '...' : ''}}</div>
+                                <div>{{song.title|limitTo:20}}{{song.title.length > 20 ? '...' : ''}}</div>
                                 <div>
-                                    <strong>{{song.album|limitTo:20}}{{song.album.length > 20 ? '...' :''}}</strong>
+                                    <i>{{song.album|limitTo:20}}{{song.album.length > 20 ? '...' :''}}</i>
                                 </div>
-                                <div class="add-to-catalog" ng-click="addToAlbums(albumID)"><span class="glyphicon glyphicon-plus add-catalog-btn"></span><span class="add-catalog-txt">Add to catalog</span></div>
+                                <div>
+                                    <strong>{{song.artist|limitTo:20}}{{song.artist.length > 20 ? '...' :''}}</strong>
+                                </div>
+                                <div class="add-to-catalog">Add to catalog</div>
                             </div>
                         </div>
                     </h4>

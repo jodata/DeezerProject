@@ -45,12 +45,12 @@ a {
     border-color: rgba(249,138,69,1);
 }
 #nav-player-play{
-    padding-left: 5px;
+    padding-left: 4px;
     padding-top: 4px;
 }
 #nav-player-mute{
-    padding-left: 6px;
-    padding-top: 6px;
+    padding-left: 5px;
+    padding-top: 5px;
 }
 #nav-player-mute.muted{
     color:rgba(255,255,255,0.6);
@@ -82,6 +82,8 @@ a {
 /*catalogue.html*/
 .accordeon-title{
     display: inline-block;
+    margin-left: 5px;
+    vertical-align: middle;
 }
 .accordeon-img {
 
@@ -105,47 +107,46 @@ a {
     -moz-column-count: 3; /* Firefox */
     column-count: 3;
 }
-.add-to-playlist{
-    border : solid 3px rgba(255,165,83,1);
-    color: rgba(255,165,83,1);
-    background-color: rgba(0,0,0,0);
-    height: 24px;
-    width: 24px;
-    padding-left: 3px;
-    padding-top: 2px;
-    -webkit-border-radius: 22px;
-    -moz-border-radius: 22px;
-    border-radius: 22px;
-    cursor: pointer;
+.catalog-result{
+    opacity: 0.6;
+    border-color: #f5f5f5;
+    cursor:pointer;
 }
-
+.catalog-result:hover{
+    opacity: 1;
+    background-color: #ddd;
+}
 .add-to-catalog{
     color: rgba(255,165,83,1);
-    height: 27px;
     margin-top: 10px;
-    cursor: pointer;
     font-weight: 500;
+    vertical-align: middle;
 }
 .add-catalog-btn{
-    border : solid 3px rgba(255,165,83,1);
+    border : solid 2px rgba(255,165,83,1);
     color: rgba(255,165,83,1);
     background-color: rgba(0,0,0,0);
     height: 21px;
     width: 21px;
     padding-left: 1px;
     padding-top: 0px;
-    -webkit-border-radius: 24px;
-    border-radius: 24px;
+    -webkit-border-radius: 23px;
+    border-radius: 23px;
     cursor: pointer;
-    vertical-align: top;
+    display: inline-block;
+    line-height: 1.1em;
+    text-align: center;
+    box-sizing: border-box;
+    font-size: larger;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif;
 }
-.add-catalog-txt{
-    vertical-align: bottom;
-    margin-left: 5px;
+.add-catalog-btn>div{
+    margin-top: -1px;
+    line-height: 19px;
+    position: relative;
 }
-.add-to-playlist:hover,
-.add-to-catalog:hover,
-.add-to-catalog:hover .add-catalog-btn{
+.add-catalog-btn:hover{
     border-color: #333;
     color:#333;
 }
@@ -306,14 +307,15 @@ html, body, .track{
     color: #ffe7d4;
     -webkit-border-radius: 25px;
     border-radius: 25px;
-    padding: 8px 0 0 1px;
+    padding: 6px 0 0 1px;
 }
 #current-mute{
-    padding-top: 9px;
+    padding-top: 7px;
     padding-left: 3px;
 }
 #current-play{
-    padding-right: 3px;
+    padding-left: 0;
+    padding-right: 2px;
 }
 #current-play:hover, #current-mute:hover{
     color:#333;

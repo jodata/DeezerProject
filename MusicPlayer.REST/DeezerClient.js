@@ -3,22 +3,14 @@ var httpClient = require('./httpClient');
 
 var Deezer = module.exports = function() {
 
-    var DEEZER_ARTIST_SEARCH = 'http://api.deezer.com/search/artist?q={_}';
-    var DEEZER_ARTIST_ALBUMS = 'http://api.deezer.com/artist/{_}/albums';
-    var DEEZER_SONGS_ALBUMS = 'http://api.deezer.com/album/{_}/tracks';
-    var DEEZER_QUERY        = 'http://api.deezer.com/search?q={_}';
+    var DEEZER_ALBUM         = 'http://api.deezer.com/album/{_}';
+    var DEEZER_SONGS_ALBUMS  = 'http://api.deezer.com/album/{_}/tracks';
+    var DEEZER_QUERY         = 'http://api.deezer.com/search?q={_}';
 
-    this.searchArtist = function (artistName, callback) {
-        var url = DEEZER_ARTIST_SEARCH.replace('{_}', encodeURIComponent(artistName) );
-        new httpClient().GET(url, function (resp, err) {
-            callback(JSON.parse(resp.body).data);
-        });
-    }; // method
-
-    this.getArtistAlbums = function (artistID, callback) {
-        var url = DEEZER_ARTIST_ALBUMS.replace('{_}', artistID);
+    this.getAlbum = function (albumID, callback) {
+        var url = DEEZER_ALBUM.replace('{_}', albumID);
         new httpClient().GET(url, function (resp,err) {
-            callback(JSON.parse(resp.body).data,err);
+            callback(JSON.parse(resp.body),err);
         });
     }; // method
 
