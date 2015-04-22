@@ -65,6 +65,9 @@
             $scope.currentTrack   = $scope.musicPlayer.getCurrentTrack();
             $scope.afterTrack = $scope.musicPlayer.getAfterTrack();
 
+            $scope.voted = [];
+            $scope.recentVotedTrack = -1;
+
             $scope.previousTracks = $scope.musicPlayer.getPreviousTracks();
             $scope.isplaying = false;
             $scope.albums = $scope.musicPlayer.getAlbums();
@@ -73,6 +76,7 @@
             $scope.entete = false;
             $scope.position = $scope.musicPlayer.getPositionTrack();
 
+            $scope.searchResult=[];
             <!--affiche la page correspondante selon la location de l'utilisateur-->
             $scope.isActive = function(route) {
                 return route === $location.path();
@@ -98,7 +102,12 @@
                 $scope.currentTrack   = $scope.musicPlayer.getCurrentTrack();
                 $scope.afterTrack    = $scope.musicPlayer.getAfterTrack();
                 $scope.previousTracks = $scope.musicPlayer.getPreviousTracks();
-                $scope.$apply();
+                if($scope.afterTrack!=null)
+                    for(var i=0;i<$scope.voted.length;i++){
+                        if($scope.voted[i]==$scope.afterTrack.trackID)
+                            $scope.voted.splice(i,1);
+                    }
+//                $scope.$apply();
             };
 
             $scope.notInPlaylist = function(id){
@@ -124,11 +133,24 @@
             $scope.addToPlaylist = function(trackID){
                 $scope.musicPlayer.postProposedTrack(trackID);
                 $scope.updatePlaylist(); // Provisoire
-                $scope.addVote($scope.proposedTracks[$scope.proposedTracks.length-1].id); // Provisoire
             };
-
+            $scope.alreadyVoted = function(idTrack){
+                for(var i=0; i<$scope.voted.length;i++){
+                    if($scope.voted[i]==idTrack) {
+                        return true;
+                    }
+                }
+                return false;
+            };
             $scope.addVote = function(idTrack){
-                $scope.proposedTracks[idTrack].votes = $scope.musicPlayer.postAddVote(idTrack);
+                if(!$scope.alreadyVoted($scope.proposedTracks[idTrack].trackID)) {
+                    $scope.proposedTracks[idTrack].votes = $scope.musicPlayer.postAddVote(idTrack);
+                    $scope.voted.push($scope.proposedTracks[idTrack].trackID);
+                    $scope.recentVotedTrack = idTrack;
+                    setTimeout(function(){
+                        $scope.recentVotedTrack = -1;
+                    },2000);
+                }
             };
 
             $scope.calculVotes = function(currentTrack){
@@ -138,6 +160,11 @@
             $scope.givePosition = function(pos, trackID){
                 $scope.musicPlayer.postPosition(pos, trackID);
             };
+
+            $scope.searchAnimate = function(e){
+                angular.element(e.target).toggleClass("active");
+                $("#playlist-search").toggle(500);
+            }
             ///////////////////////////////////
             // FONCTIONS DE PLAYER DEEZER //////
             ///////////////////////////////////
@@ -146,23 +173,20 @@
             $scope.playTracks = function() {
                 if(!$scope.isplaying){
                     $scope.isplaying = true;
-                    $("#current-play").removeClass("glyphicon-play").addClass("glyphicon-stop").css("padding-right","3px");
-                    $("#nav-player-play").removeClass("glyphicon-play").addClass("glyphicon-stop").css("padding-left","5px");
-                    $scope.position = $scope.musicPlayer.getPositionTrack();
+                    $scope.position=$scope.musicPlayer.getPositionTrack();
                     DZ.player.playTracks( [$scope.currentTrack.deezerID], 0, $scope.position);
                 }else {
                     $scope.isplaying=false;
-                    $("#current-play").addClass("glyphicon-play").removeClass("glyphicon-stop").css("padding-right","0px");
-                    $("#nav-player-play").addClass("glyphicon-play").removeClass("glyphicon-stop").css("padding-left","6px");
                     DZ.player.pause();
                 }
             };
 
             //Joue la prochaine track après la mise à jour
             $scope.playNextTrack = function() {
-                if($scope.currentTrack)
-                DZ.player.playTracks( [$scope.currentTrack.deezerID] );
-                $scope.isplaying = true;
+                if($scope.currentTrack){
+                    DZ.player.playTracks( [$scope.currentTrack.deezerID] );
+                    $scope.isplaying = true;
+                }
             };
 
             //Coupe le son
@@ -171,15 +195,11 @@
                 {
                     DZ.player.setVolume(100);
                     $scope.ismute = false;
-                    $("#current-mute").removeClass("glyphicon-volume-off muted").addClass("glyphicon-volume-up");
-                    $("#nav-player-mute").removeClass("glyphicon-volume-off muted").addClass("glyphicon-volume-up");
                 }
 
                 else{
                     DZ.player.setVolume(0);
                     $scope.ismute = true;
-                    $("#current-mute").addClass("glyphicon-volume-off muted").removeClass("glyphicon-volume-up");
-                    $("#nav-player-mute").addClass("glyphicon-volume-off muted").removeClass("glyphicon-volume-up");
                 }
             };
 
@@ -191,6 +211,8 @@
             DZ.Event.subscribe('player_position', function(e){
                if(e[0] % 5 < 0.3){
                    $scope.proposedTracks = $scope.musicPlayer.getProposedTracks();
+                   if(afterTrack==null)
+                       $scope.afterTrack=$scope.musicPlayer.getAfterTrack();
                    $scope.$apply();
                    $scope.givePosition(e[0], $scope.currentTrack.trackID);
                 }
@@ -199,7 +221,7 @@
 
             //Indique des informations sur une track qui démarre
             DZ.Event.subscribe('current_track', function(track){
-                    console.log(track);
+//                    console.log(track);
             });
 
             //Deezer event qui se déclenche à la fin d'une chanson
@@ -222,9 +244,34 @@
                 $scope.updatePlaylist();//A modifier pour ceux qui ont une musique de retard
                 $scope.playNextTrack();
             };
+            $scope.getSearchResult = function(query){
+                $scope.searchResult=[];
+                if(query) {
+                    var notInAlbums = true;
+                    var res = $scope.musicPlayer.getSearchResult(query);
+                    for(var i=0;i<res.length || i<10;i++) {
+                        var track = res[i];
+                        for (var j = 0; j < $scope.albums.length; j++) {
+                            if ($scope.albums[j].deezerID == track.album.id) {
+                                notInAlbums = false;
+                                break;
+                            }
+                        }
+                        if (notInAlbums)
+                            $scope.searchResult.push({
+                                title: track.title,
+                                artist: track.artist.name,
+                                album: track.album.title,
+                                cover: track.album.cover,
+                                albumID: track.album.id
+                            });
+                        else notInAlbums = true;
+                    }
+                }
+            }
         } // class
     </script>
-    
+
     <script>
         /***************************************
          * client qui interagit avec le serveur *
@@ -241,6 +288,7 @@
             var POST_CALC_VOTES     = 'http://localhost:3000/playlist/calculVotes';
             var GET_ALBUMS          = 'http://localhost:3000/albums';
             var GET_TRACKS          = 'http://localhost:3000/tracks';
+            var GET_SEARCH          = 'http://localhost:3000/search/{_}';
             var PUT_ALBUMS_TRACKS   = 'http://localhost:3000/tracks/album/{_}';
             var PUT_PROPOSED_TRACK  = 'http://localhost:3000/playlist/{_}';
             var POST_PROPOSED_TRACK = 'http://localhost:3000/playlist/add/{_}';
@@ -280,6 +328,12 @@
                 var position = this.doRequest('GET', POSITION_TRACK_URI, null);
                 return position;
             };
+
+            this.getSearchResult = function(query){
+                var url = GET_SEARCH.replace('{_}',query);
+                var res = this.doRequest('GET', url, null);
+                return res;
+            }
 
             //Augmente le vote de 1 d'une track
             this.postAddVote = function(idTrack){
