@@ -46,8 +46,6 @@ db.get('Albums', { data: true }, function(err, body) {
 
 var previousTracks = [ ];
 
-var isPutting = false;
-
 /**Tools**/
 var notInTable = function(data,id,callback){
     for(var i=0;i<data.length;i++){
@@ -93,39 +91,22 @@ app.get('/playlist/previousTracks', function (request, response) {
 });
 
 app.get('/albums', function (request, response) {
-    db.get('Albums', { data: true }, function(err, body) {
-        if (!err){
-            response.json(body.data);
-        }
-    });
+    response.json(albums);
 });
 
 app.get('/albums/:id', function (request, response) {
-    db.get('Albums', { data: true }, function(err, body) {
-        if (!err){
-            response.send(resp[request.params.id]);
-        }
-    });
+    response.json(albums[request.params.id]);
 });
 
 app.get('/tracks', function (request, response) {
-    db.get('Tracks', { data: true }, function(err, body) {
-        if (!err){
-            response.json(body.data);
-        }
-    });
+    response.json(tracks);
 });
 
 app.get('/tracks/:id', function (request, response) {
-    db.get('Tracks', { data: true }, function(err, body) {
-        if (!err){
-            response.send(resp[request.params.id]);
-        }
-    });
+    response.json(tracks[request.params.id]);
 });
 
 app.get('/search/:query', function (request, response) {
-    console.log("Search in progress...");
     new deezer().getSearchResult(request.params.query,function(resp,err){
         if(!err)
             response.json(resp);
@@ -136,49 +117,6 @@ app.get('/search/:query', function (request, response) {
 /**********
  *   PUT  *
  **********/
-
-app.put('/tracks/album/:albumID', function (request, response) {
-    if(!isPutting) {
-        var albumID = parseInt(request.params.albumID);
-        db.get('Albums', { data: true }, function(err, body) {
-            if (!err) {
-                var albums=body.data;
-                db.get('Tracks', { data: true }, function(err, jsonData) {
-                    if (!err) {
-                        new deezer().getAlbumTracks(albums[albumID].deezerID, function (resp,err) {
-                            if (!err){
-                                    var tracks = resp;
-                                var offset_id = jsonData.data.length;
-                                for (var i = 0; i < tracks.length; i++) {
-                                    notInTable(jsonData.data, tracks[i].id, function (id) {
-                                        console.log(tracks[i].title + " " + id);
-                                        if (id == -1) {
-                                            jsonData.data.push({
-                                                id: offset_id + i,
-                                                deezerID: tracks[i].id,
-                                                title: tracks[i].title,
-                                                preview: tracks[i].preview,
-                                                albumID: albumID
-                                            });
-                                        } else console.log("in Table");
-                                    });
-                                }
-                                db.insert(jsonData, function (err, body) {
-                                    if (!err) {
-                                        response.send(body.ok);
-                                    } else {
-                                        response.send(body);
-                                        console.log(body);
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-            }
-        });
-    }
-});
 
 app.put('/playlist/:trackID', function(request, response) {
     var trackID = parseInt(request.params.trackID);
@@ -206,6 +144,48 @@ app.put('/playlist/:trackID', function(request, response) {
 /**********
  *  POST  *
  **********/
+app.post('/album/:albumID',function(request, response){
+    var albumID = request.params.albumID;
+    notInTable(albums,albumID,function(res){
+        if(res==-1){
+            new deezer().getAlbum(albumID, function(deezerAlbum,err){
+                if(!err){
+                    db.get('Albums', { data: true }, function(err, albumsData) {
+                        if (!err){
+                            var album = {id:albumsData.data.length,deezerID:deezerAlbum.id,title:deezerAlbum.title,artist:deezerAlbum.artist.name,cover:deezerAlbum.cover};
+                            albums.push(album);
+                            albumsData.data.push(album);
+                            db.insert(albumsData, function (err, respAlbum) {
+                                if(!err){
+                                    new deezer().getAlbumTracks(albumID,function(albumTracks,err){
+                                        if(!err){
+                                            db.get('Tracks',{data:true},function(err,tracksData){
+                                                if(!err){
+                                                    var offsetId = tracksData.data.length;
+                                                    for(var i=0;i<albumTracks.length;i++){
+                                                        var track = {id:offsetId+i,deezerID:albumTracks[i].id,title:albumTracks[i].title,albumID:albumsData.data.length-1};
+                                                        tracks.push(track);
+                                                        tracksData.data.push(track);
+                                                    }
+                                                    db.insert(tracksData, function (err, respTracks) {
+                                                        if(!err){
+                                                            response.json(albums);
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    });
+});
+
 app.post('/playlist/nextTrack', function (request, response) {
     previousTracks.push(currentTrack);
     if(previousTracks.length>3)
