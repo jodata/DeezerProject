@@ -32,10 +32,11 @@
     <!--Deezer player -->
     <script>
         DZ.init({
-            appId  : 'YOUR_APP_ID',
-            channelUrl : 'http://YOUR_DOMAIN/channel.html',
+            appId  : '155901',
+            channelUrl : 'http://localhost:63342/Music-Player/MusicPlayer.UI/index.html',
             player: {
                     onload: function() {
+
                     }
             }
         });
@@ -73,7 +74,7 @@
             $scope.albums = $scope.musicPlayer.getAlbums();
             $scope.tracks = $scope.musicPlayer.getTracks();
             $scope.ismute = false;
-            $scope.entete = false;
+            $scope.isconnected = true;
             $scope.position = $scope.musicPlayer.getPositionTrack();
 
             $scope.searchResult=[];
@@ -209,9 +210,15 @@
 
             //Indique la position du player
             DZ.Event.subscribe('player_position', function(e){
+                if (e[1] == 30 ){
+                    $scope.connected = false;
+                }
+                else{
+                    $scope.connected = true;
+                }
                if(e[0] % 5 < 0.3){
                    $scope.proposedTracks = $scope.musicPlayer.getProposedTracks();
-                   if(afterTrack==null)
+                   if($scope.afterTrack==null)
                        $scope.afterTrack=$scope.musicPlayer.getAfterTrack();
                    $scope.$apply();
                    $scope.givePosition(e[0], $scope.currentTrack.trackID);
@@ -226,9 +233,14 @@
 
             //Deezer event qui se déclenche à la fin d'une chanson
             DZ.Event.subscribe('track_end', function(end){
-                $scope.calculVotes($scope.currentTrack);
-                $scope.updatePlaylist();//A modifier pour ceux qui ont une musique de retard
-                $scope.playNextTrack();
+                if($scope.connected==false){
+
+                }
+                else {
+                    $scope.calculVotes($scope.currentTrack);
+                    $scope.updatePlaylist();
+                    $scope.playNextTrack();
+                }
             });
 
             //Deezer event quand le player est prêt on lance la radio
@@ -240,9 +252,9 @@
             //      Next Track               //
             ///////////////////////////////////
             $scope.nextTrack = function(){
-                $scope.calculVotes($scope.currentTrack);
-                $scope.updatePlaylist();//A modifier pour ceux qui ont une musique de retard
-                $scope.playNextTrack();
+                    $scope.calculVotes($scope.currentTrack);
+                    $scope.updatePlaylist();//A modifier pour ceux qui ont une musique de retard
+                    $scope.playNextTrack();
             };
             $scope.getSearchResult = function(query){
                 $scope.searchResult=[];
